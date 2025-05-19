@@ -183,7 +183,8 @@ class _DetailBookingPageState extends State<DetailBookingPage> {
               ),
               DetailBookingServiceDetailsSection(),
               Gap(22.h),
-              DetailBookingOverviewSection()
+              DetailBookingOverviewSection(),
+              Gap(58.h),
             ],
           ),
         ),
