@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:servista/features/service/pages/service_booking_page.dart';
 
 import '../../../../../core/theme/color_value.dart';
+import '../../../cubit/service_cubit.dart';
 
 Future<String?> showWorkerBottomSheet(
   BuildContext context,
@@ -12,8 +15,6 @@ Future<String?> showWorkerBottomSheet(
 ) {
   final List<String> worker = ["Pekerja 1", "Pekerja 2", "Pekerja 3"];
   final List<String> bookedWorker = ["Pekerja 1"];
-
-  String? selectedWorker;
 
   final dateFormatted = DateFormat(
     "EEEE, d MMMM yyyy",
@@ -26,11 +27,16 @@ Future<String?> showWorkerBottomSheet(
     context: context,
     isScrollControlled: true,
     builder: (context) {
-      return Padding(
-        padding: MediaQuery.of(context).viewInsets + EdgeInsets.all(24.w),
-        child: StatefulBuilder(
-          builder: (context, setState) {
-            return Column(
+      final cubit = context.read<ServiceCubit>();
+
+      return BlocBuilder<ServiceCubit, ServiceState>(
+        builder: (context, state) {
+          final selectedWorker = state.selectedWorker;
+          final focusedWorker = state.focusedWorker;
+
+          return Padding(
+            padding: MediaQuery.of(context).viewInsets + EdgeInsets.all(24.w),
+            child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -77,12 +83,12 @@ Future<String?> showWorkerBottomSheet(
                 ),
                 SizedBox(height: 22.w),
 
-                // Grid list of workers
+                // List pekerja
                 Column(
                   children:
                       worker.map((item) {
                         final isBooked = bookedWorker.contains(item);
-                        final isSelected = selectedWorker == item;
+                        final isSelected = focusedWorker == item;
 
                         Color bgColor;
                         Color textColor;
@@ -105,9 +111,7 @@ Future<String?> showWorkerBottomSheet(
                                 isBooked
                                     ? null
                                     : () {
-                                      setState(() {
-                                        selectedWorker = item;
-                                      });
+                                      cubit.setFocusedWorker(item);
                                     },
                             child: Container(
                               width: double.infinity,
@@ -129,6 +133,7 @@ Future<String?> showWorkerBottomSheet(
                         );
                       }).toList(),
                 ),
+
                 SizedBox(height: 22.w),
 
                 Align(
@@ -137,16 +142,25 @@ Future<String?> showWorkerBottomSheet(
                     style: ElevatedButton.styleFrom(
                       minimumSize: Size(110.w, 34.w),
                       backgroundColor:
-                          selectedWorker == null
+                          focusedWorker == null
                               ? ColorValue.grayColor
                               : ColorValue.primaryColor,
                       disabledBackgroundColor: ColorValue.grayColor,
                     ),
                     onPressed:
-                        selectedWorker == null
+                        focusedWorker == null
                             ? null
                             : () {
-                              Navigator.pop(context, selectedWorker);
+                              selectedWorker == null
+                                  ? Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder:
+                                          (context) => ServiceBookingPage(),
+                                    ),
+                                  )
+                                  : Navigator.pop(context);
+                              cubit.setSelectedWorker(focusedWorker);
                             },
                     child: Text(
                       "Pilih Pekerja",
@@ -154,7 +168,7 @@ Future<String?> showWorkerBottomSheet(
                         fontWeight: FontWeight.bold,
                         fontSize: 14.sp,
                         color:
-                            selectedWorker == null
+                            focusedWorker == null
                                 ? ColorValue.darkColor.withOpacity(0.5)
                                 : ColorValue.darkColor,
                       ),
@@ -162,9 +176,9 @@ Future<String?> showWorkerBottomSheet(
                   ),
                 ),
               ],
-            );
-          },
-        ),
+            ),
+          );
+        },
       );
     },
   );
