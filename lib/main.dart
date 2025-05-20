@@ -52,7 +52,6 @@ class MyApp extends StatelessWidget {
             title: 'Servista',
             debugShowCheckedModeBanner: false,
             theme: AppThemeData.getThemeLight(),
-
             home: child,
           );
         },

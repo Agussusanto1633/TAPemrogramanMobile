@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:servista/core/nav/nav.dart';
 import 'package:servista/core/theme/color_value.dart';
+import 'package:servista/features/booking/page/detail_booking_page.dart';
 
 class BookingList extends StatelessWidget {
   //title
@@ -105,24 +107,29 @@ class BookingList extends StatelessWidget {
                 ],
               ),
             ),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(10.r),
-                  bottomRight: Radius.circular(10.r),
+            GestureDetector(
+              onTap: () {
+                Nav.to(context, DetailBookingPage());
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(10.r),
+                    bottomRight: Radius.circular(10.r),
+                  ),
                 ),
-              ),
-              padding: EdgeInsets.symmetric(
-                vertical: 10.h,
-              ),
-              child: Center(
-                child: Text("Lihat Detail", style:
-                GoogleFonts.mulish(
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w400,
-                  color: ColorValue.blueLinkColor,
-                ),),
+                padding: EdgeInsets.symmetric(
+                  vertical: 10.h,
+                ),
+                child: Center(
+                  child: Text("Lihat Detail", style:
+                  GoogleFonts.mulish(
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w400,
+                    color: ColorValue.blueLinkColor,
+                  ),),
+                ),
               ),
             )
           ],

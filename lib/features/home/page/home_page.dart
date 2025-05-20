@@ -7,6 +7,7 @@ import 'package:servista/features/home/page/search_service_page.dart';
 import 'package:servista/features/service/bloc/service_state.dart';
 import 'package:servista/features/service/pages/detail_service_page.dart';
 import 'package:servista/features/service/repositories/service_repository.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/scroll/scroll_behavior.dart';
 import '../../../core/theme/app_style.dart';
@@ -26,13 +27,27 @@ class _HomePageState extends State<HomePage> {
   List<String> locations = ['Malang', 'Surabaya', 'Jakarta', 'Bandung'];
   String selectedLocation = 'Malang';
   late ServiceBloc serviceBloc;
+  String displayName = '';
+  String email = '';
+  String photoUrl = '';
 
   @override
   void initState() {
     super.initState();
     serviceBloc = ServiceBloc(serviceRepository: ServiceRepository())
       ..add(LoadServices());
+    loadUserData();
   }
+
+  Future<void> loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      displayName = prefs.getString('user_displayName') ?? 'Guest';
+      email = prefs.getString('user_email') ?? 'Unknown';
+      photoUrl = prefs.getString('user_photoURL') ?? '';
+    });
+  }
+
 
   @override
   void dispose() {
@@ -76,7 +91,9 @@ class _HomePageState extends State<HomePage> {
                               decoration: ShapeDecoration(
                                 image: DecorationImage(
                                   image: NetworkImage(
-                                    "https://i.pinimg.com/236x/95/68/6a/95686a79fda78c1d70ca6bbc09587977.jpg",
+                                    photoUrl.isNotEmpty
+                                        ? photoUrl
+                                        : 'https://example.com/default_profile.png',
                                   ),
                                   fit: BoxFit.cover,
                                 ),
@@ -87,7 +104,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             SizedBox(width: 10.w),
                             Text(
-                              "Halo Firman",
+                              "Halo $displayName",
                               style: textTheme.titleMedium?.copyWith(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w400,
