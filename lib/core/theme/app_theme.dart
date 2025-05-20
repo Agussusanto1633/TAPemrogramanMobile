@@ -6,6 +6,7 @@ import 'color_value.dart';
 
 class AppThemeData {
   static ThemeData getThemeLight() {
+
     Color primaryColor = ColorValue.primaryColor;
     final Map<int, Color> primaryColorMap = {
       50: primaryColor,
@@ -60,6 +61,28 @@ class AppThemeData {
           ),
         ),
       ),
+
+
+      tabBarTheme: TabBarTheme(
+        overlayColor: MaterialStateProperty.resolveWith<Color?>(
+              (Set<MaterialState> states) {
+            if (states.contains(MaterialState.pressed)) {
+              return ColorValue.primaryColor.withOpacity(0); // efek splash
+            }
+            return null;
+          },
+        ),
+        splashFactory: InkRipple.splashFactory,
+        labelColor: ColorValue.darkColor,
+        unselectedLabelColor: ColorValue.darkColor.withOpacity(0.5),
+        indicator: UnderlineTabIndicator(
+          borderSide: BorderSide(
+            width: 2,
+            color: ColorValue.primaryColor,
+          ),
+        ),
+      ),
+
       textTheme: TextTheme(
         /// Display Text Style
         // Regular 28
