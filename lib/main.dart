@@ -55,7 +55,8 @@ class MyApp extends StatelessWidget {
             home: child,
           );
         },
-        child: SplashPage(),
+        child: FirestorePage(
+        ),
       ),
     );
   }
