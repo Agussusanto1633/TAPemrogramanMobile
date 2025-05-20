@@ -1,9 +1,11 @@
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:servista/features/service/cubit/service_cubit.dart';
 import 'package:servista/features/service/model/service_model.dart';
 
 import '../../../core/theme/app_style.dart';
@@ -42,6 +44,7 @@ class _DetailServicePageState extends State<DetailServicePage>
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final cubit = context.read<ServiceCubit>();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -537,7 +540,9 @@ class _DetailServicePageState extends State<DetailServicePage>
               ],
             ),
             SizedBox(height: 10.w),
-            SizedBox(
+            BlocBuilder<ServiceCubit, ServiceState>(
+              builder: (context, state) {
+                return SizedBox(
               width: double.infinity,
               height: 50.w,
               child: ElevatedButton(
@@ -550,8 +555,12 @@ class _DetailServicePageState extends State<DetailServicePage>
                   elevation: 0,
                 ),
 
-                onPressed: () => startBookingFlow(context),
-
+                onPressed: () {
+                  //cubit
+                  cubit.setSelectedService(widget.service!.name);
+                  cubit.setPrice(widget.service!.price);
+                  startBookingFlow(context);
+                },
                 child: Text(
                   "Sewa Sekarang",
                   style: GoogleFonts.poppins(
@@ -561,6 +570,8 @@ class _DetailServicePageState extends State<DetailServicePage>
                   ),
                 ),
               ),
+            );
+                },
             ),
           ],
         ),
