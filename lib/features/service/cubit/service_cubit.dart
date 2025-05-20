@@ -30,6 +30,14 @@ class ServiceCubit extends Cubit<ServiceState> {
     emit(state.copyWith(paymentMethod: method));
   }
 
+  void setSelectedService(String service) {
+    emit(state.copyWith(selectedService: service));
+  }
+
+  void setPrice(int price) {
+    emit(state.copyWith(price: price));
+  }
+
   void reset() {
     emit(ServiceState());
   }

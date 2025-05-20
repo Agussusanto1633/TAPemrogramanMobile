@@ -5,11 +5,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:servista/core/nav/nav.dart';
 import 'package:servista/core/theme/app_font_weight.dart';
 import 'package:servista/core/theme/color_value.dart';
+import 'package:servista/core/utils/utils.dart';
 import 'package:servista/features/service/widgets/bottom_sheets_widgets/bottom_sheets/calendar_bottom_sheet.dart';
 import 'package:servista/features/service/widgets/bottom_sheets_widgets/bottom_sheets/payment_method_bottom_sheet.dart';
 
+import '../../payment/page/payment_page.dart';
 import '../cubit/service_cubit.dart';
 import '../widgets/bottom_sheets_widgets/booking_flow.dart';
 
@@ -389,7 +392,9 @@ class _ServiceBookingPageState extends State<ServiceBookingPage> {
                               ),
                             ),
                             Text(
-                              "Rp 1.000.000",
+                              Utils.formatRupiah(
+                                state.price,
+                              ),
                               style: GoogleFonts.poppins(
                                 color: ColorValue.darkColor,
                                 fontSize: 16.sp,
@@ -399,20 +404,62 @@ class _ServiceBookingPageState extends State<ServiceBookingPage> {
                           ],
                         ),
                         Gap(10.h),
-                        Container(
-                          padding: EdgeInsets.symmetric(vertical: 10.h),
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: ColorValue.primaryColor,
-                            borderRadius: BorderRadius.circular(10.r),
+                        state.paymentMethod == null ?
+                        GestureDetector(
+                          onTap: () {
+                            //snackbar
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  "Pilih metode pembayaran terlebih dahulu",
+                                  style: textTheme.bodyLarge!.copyWith(
+                                    color: Colors.white,
+                                    fontSize: 14.sp,
+                                    fontWeight: AppFontWeight.regular,
+                                  ),
+                                ),
+                                backgroundColor: ColorValue.darkColor,
+                              ),
+                            );
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(vertical: 10.h),
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: ColorValue.primaryColor.withOpacity(0.5),
+                              borderRadius: BorderRadius.circular(10.r),
+                            ),
+                            child: Center(
+                              child: Text(
+                                " Pembayaran",
+                                style: textTheme.bodyLarge!.copyWith(
+                                  color: ColorValue.darkColor,
+                                  fontSize: 14.sp,
+                                  fontWeight: AppFontWeight.semiBold,
+                                ),
+                              ),
+                            ),
                           ),
-                          child: Center(
-                            child: Text(
-                              " Pembayaran",
-                              style: textTheme.bodyLarge!.copyWith(
-                                color: ColorValue.darkColor,
-                                fontSize: 14.sp,
-                                fontWeight: AppFontWeight.semiBold,
+                        ):
+                        GestureDetector(
+                          onTap: () {
+                            Nav.to(context, const PaymentPage());
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(vertical: 10.h),
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: ColorValue.primaryColor,
+                              borderRadius: BorderRadius.circular(10.r),
+                            ),
+                            child: Center(
+                              child: Text(
+                                " Pembayaran",
+                                style: textTheme.bodyLarge!.copyWith(
+                                  color: ColorValue.darkColor,
+                                  fontSize: 14.sp,
+                                  fontWeight: AppFontWeight.semiBold,
+                                ),
                               ),
                             ),
                           ),
