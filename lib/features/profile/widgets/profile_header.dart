@@ -11,86 +11,73 @@ import 'package:servista/features/profile/bloc/profile_bloc.dart';
 import 'package:servista/features/profile/bloc/profile_state.dart';
 
 class ProfileHeader extends StatelessWidget {
-  const ProfileHeader({Key? key}) : super(key: key);
+  final String userName;
+  final String userPhotoURL;
+  final String userEmail;
+  final String userPhoneNumber;
+
+  const ProfileHeader({Key? key, required this.userName, required this.userPhotoURL, required this.userEmail, required this.userPhoneNumber}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ProfileBloc, ProfileState>(
-      builder: (context, state) {
-        if (state is ProfileLoading) {
-          return Center(child: CircularProgressIndicator());
-        } else if (state is ProfileLoaded) {
-          final user = state.user;
-          return Column(
-            children: [
-              Stack(
-                children: [
-                  Container(
-                    width: 150.w,
-                    height: 150.w,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: ColorValue.primaryColor,
-                        width: 5.w,
-                      ),
-                    ),
-                    child: ClipOval(
-                      child: Image.network(
-                        user.photoURL ?? "https://via.placeholder.com/150",
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: Container(
-                      height: 48.h,
-                      width: 48.w,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white,
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.all(12.w),
-                        child: SvgPicture.asset("assets/icons/camera.svg"),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Gap(18.h),
-              Text(
-                user.displayName ?? "Nama tidak tersedia",
-                style: GoogleFonts.mulish(
-                  fontSize: 24.sp,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+    return Column(
+      children: [
+        Stack(
+          children: [
+            Container(
+              width: 150.w,
+              height: 150.w,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: ColorValue.primaryColor,
+                  width: 5.w,
                 ),
               ),
-              Gap(5.h),
-              Text(
-                user.phoneNumber ?? "No telepon tidak tersedia",
-                style: GoogleFonts.mulish(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
+              child: ClipOval(
+                child: Image.network(
+                  userPhotoURL,
+                  fit: BoxFit.cover,
                 ),
               ),
-            ],
-          );
-        } else if (state is ProfileError) {
-          return Center(
-            child: Text(
-              "Error: ${state.message}",
-              style: GoogleFonts.mulish(color: Colors.red),
             ),
-          );
-        }
-
-        return SizedBox.shrink(); // Jika state adalah ProfileInitial
-      },
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: Container(
+                height: 48.h,
+                width: 48.w,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(12.w),
+                  child: SvgPicture.asset("assets/icons/camera.svg"),
+                ),
+              ),
+            ),
+          ],
+        ),
+        Gap(18.h),
+        Text(
+          userName,
+          style: GoogleFonts.mulish(
+            fontSize: 24.sp,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        Gap(5.h),
+        Text(
+          userPhoneNumber,
+          style: GoogleFonts.mulish(
+            fontSize: 16.sp,
+            fontWeight: FontWeight.w500,
+            color: Colors.white,
+          ),
+        ),
+      ],
     );
   }
 }

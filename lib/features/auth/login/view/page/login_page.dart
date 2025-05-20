@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:servista/core/custom_widgets/custom_button_widget.dart';
 import 'package:servista/core/theme/color_value.dart';
 import 'package:servista/features/auth/login/bloc/auth_bloc.dart';
+import 'package:servista/features/auth/login/bloc/auth_service.dart';
 import 'package:servista/features/auth/login/bloc/auth_state.dart';
 import 'package:servista/home_dummy.dart';
 
@@ -26,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocProvider(
-        create: (context) => AuthBloc(),
+        create: (context) => AuthBloc(AuthService()),
         child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
