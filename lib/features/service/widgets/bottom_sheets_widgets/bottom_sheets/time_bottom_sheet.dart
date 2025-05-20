@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../../core/theme/color_value.dart';
+import '../../../cubit/service_cubit.dart';
 
 Future<String?> showTimeBottomSheet(
   BuildContext context,
@@ -26,8 +28,6 @@ Future<String?> showTimeBottomSheet(
 
   final List<String> bookedTimes = ["11.00", "15.00", "20.00"];
 
-  String? selectedTime;
-
   final dateFormatted = DateFormat(
     "EEEE, d MMMM yyyy",
     'id_ID',
@@ -38,14 +38,19 @@ Future<String?> showTimeBottomSheet(
     context: context,
     isScrollControlled: true,
     builder: (context) {
-      return Padding(
-        padding: MediaQuery.of(context).viewInsets + EdgeInsets.all(24.w),
-        child: StatefulBuilder(
-          builder: (context, setState) {
-            return Column(
+      final cubit = context.read<ServiceCubit>();
+
+      return BlocBuilder<ServiceCubit, ServiceState>(
+        builder: (context, state) {
+          final selectedTime = state.selectedTime;
+
+          return Padding(
+            padding: MediaQuery.of(context).viewInsets + EdgeInsets.all(24.w),
+            child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Tanggal Header
                 Text(
                   toBeginningOfSentenceCase(dateFormatted) ?? '',
                   style: GoogleFonts.inter(
@@ -66,7 +71,6 @@ Future<String?> showTimeBottomSheet(
 
                 // Legend
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     _buildLegendBox(
                       "Available",
@@ -90,7 +94,7 @@ Future<String?> showTimeBottomSheet(
 
                 SizedBox(height: 22.w),
 
-                // Grid
+                // Grid Waktu
                 Wrap(
                   spacing: 16.w,
                   runSpacing: 16.w,
@@ -118,9 +122,7 @@ Future<String?> showTimeBottomSheet(
                               isBooked
                                   ? null
                                   : () {
-                                    setState(() {
-                                      selectedTime = time;
-                                    });
+                                    cubit.setSelectedTime(time);
                                   },
                           child: Container(
                             width: 64.w,
@@ -144,6 +146,7 @@ Future<String?> showTimeBottomSheet(
 
                 SizedBox(height: 22.w),
 
+                // Tombol Pilih
                 Align(
                   alignment: Alignment.bottomRight,
                   child: ElevatedButton(
@@ -158,9 +161,10 @@ Future<String?> showTimeBottomSheet(
                     onPressed:
                         selectedTime == null
                             ? null
-                            : () async {
+                            : () {
+                              cubit.setSelectedTime(state.selectedTime!);
                               Navigator.pop(context, selectedTime);
-                              await Future.delayed(Duration(milliseconds: 300));
+
                             },
                     child: Text(
                       "Pilih Waktu",
@@ -176,9 +180,9 @@ Future<String?> showTimeBottomSheet(
                   ),
                 ),
               ],
-            );
-          },
-        ),
+            ),
+          );
+        },
       );
     },
   );
