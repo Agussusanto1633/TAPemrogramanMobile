@@ -74,63 +74,87 @@ class _DetailServicePageState extends State<DetailServicePage>
               ),
             ),
             flexibleSpace: FlexibleSpaceBar(
-              background: Stack(
-                fit: StackFit.expand,
-                children: [
-                  FadeInImage.assetNetwork(
-                    fit: BoxFit.cover,
-                    image:
-                        widget.service!.image,
-                    placeholder: 'assets/images/service/placeholder.png',
-                  ),
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: Padding(
-                      padding: EdgeInsets.only(bottom: 31.w, right: 16.w),
-                      child: SizedBox(
-                        height: 50.w,
-                        child: ListView.separated(
-                          reverse: true,
-                          scrollDirection: Axis.horizontal,
-                          itemCount: galleryImages.length,
-                          separatorBuilder: (_, __) => SizedBox(width: 10.w),
-                          itemBuilder: (context, index) {
-                            final imageUrl = galleryImages[index];
-                            return GestureDetector(
-                              onTap: () => _showImageDialog(imageUrl),
-                              child: Container(
-                                decoration: ShapeDecoration(
-                                  image: DecorationImage(
-                                    image: AssetImage(
-                                      'assets/images/service/placeholder.png',
+              background: Container(
+                color: Colors.white,
+                child: Stack(
+                  fit: StackFit.expand,
+                  clipBehavior: Clip.none,
+                  children: [
+                    Image.network(
+                      widget.service!.image,
+                      fit: BoxFit.cover,
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Image.asset(
+                          'assets/images/service/placeholder.png',
+                          fit: BoxFit.cover,
+                        );
+                      },
+                      errorBuilder: (context, error, stackTrace) {
+                        return Image.asset(
+                          'assets/images/service/error.png',
+                          fit: BoxFit.cover,
+                        );
+                      },
+                    ),
+
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: Padding(
+                        padding: EdgeInsets.only(bottom: 31.w, right: 16.w),
+                        child: SizedBox(
+                          height: 50.w,
+                          child: ListView.separated(
+                            reverse: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: widget.service!.photos.length,
+                            separatorBuilder: (_, __) => SizedBox(width: 10.w),
+                            itemBuilder: (context, index) {
+                              final imageUrl = widget.service!.photos[index];
+                              return GestureDetector(
+                                onTap: () => _showImageDialog(imageUrl),
+                                child: Container(
+                                  decoration: ShapeDecoration(
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                        width: 1,
+                                        color: Colors.white,
+                                      ),
+                                      borderRadius: BorderRadius.circular(10.r),
                                     ),
-                                    fit: BoxFit.cover,
                                   ),
-                                  shape: RoundedRectangleBorder(
-                                    side: BorderSide(
-                                      width: 1,
-                                      color: Colors.white,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10.r),
+                                    child: FadeInImage.assetNetwork(
+                                      placeholder:
+                                          'assets/images/service/placeholder.png',
+                                      image: imageUrl,
+                                      width: 50.w,
+                                      height: 50.w,
+                                      fit: BoxFit.cover,
+                                      imageErrorBuilder: (
+                                        context,
+                                        error,
+                                        stackTrace,
+                                      ) {
+                                        return Image.asset(
+                                          'assets/images/service/error.png',
+                                          width: 50.w,
+                                          height: 50.w,
+                                          fit: BoxFit.cover,
+                                        );
+                                      },
                                     ),
-                                    borderRadius: BorderRadius.circular(10),
                                   ),
                                 ),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10.r),
-                                  child: Image.network(
-                                    imageUrl,
-                                    width: 50.w,
-                                    height: 50.w,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
+                              );
+                            },
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -144,10 +168,7 @@ class _DetailServicePageState extends State<DetailServicePage>
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        widget.service!.name,
-                        style: textTheme.displaySmall,
-                      ),
+                      Text(widget.service!.name, style: textTheme.displaySmall),
                       Container(
                         padding: EdgeInsets.all(5.w),
                         decoration: BoxDecoration(
@@ -165,6 +186,7 @@ class _DetailServicePageState extends State<DetailServicePage>
                         "assets/icons/star.svg",
                         height: 12.w,
                         width: 12.w,
+                        color: ColorValue.primaryColor,
                       ),
                       SizedBox(width: 3.w),
                       Text(
@@ -181,24 +203,23 @@ class _DetailServicePageState extends State<DetailServicePage>
                         ),
                       ),
                       if (widget.service!.discount != 0)
-                      Row(
-                        children: [
-                          SizedBox(width: 8.w),
-                          SvgPicture.asset(
-                            "assets/icons/discount.svg",
-                            height: 12.w,
-                            width: 12.w,
-                          ),
-                          SizedBox(width: 4.w),
-                          Text(
-                            "${widget.service!.discount}% Discount area",
-                            style: textTheme.bodyLarge?.copyWith(
-                              color: ColorValue.dark2Color,
+                        Row(
+                          children: [
+                            SizedBox(width: 8.w),
+                            SvgPicture.asset(
+                              "assets/icons/discount.svg",
+                              height: 12.w,
+                              width: 12.w,
                             ),
-                          ),
-                        ],
-                      ),
-
+                            SizedBox(width: 4.w),
+                            Text(
+                              "${widget.service!.discount}% Discount area",
+                              style: textTheme.bodyLarge?.copyWith(
+                                color: ColorValue.dark2Color,
+                              ),
+                            ),
+                          ],
+                        ),
                     ],
                   ),
                   Container(
@@ -296,19 +317,39 @@ class _DetailServicePageState extends State<DetailServicePage>
 
                       double height;
                       if (tabIndex == 0) {
-                        final textSize = _measureTextSize(
-                          textTheme.bodySmall!.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                        );
-                        height = (textSize.height + 4.w) * widget.service!.facilities.length + 16.w;
+                        double textSize = 0;
+                        for (
+                          int i = 0;
+                          i < widget.service!.facilities.length;
+                          i++
+                        ) {
+                          final x = _measureTextSize(
+                            widget.service!.facilities[i].detail.toString(),
+                            textTheme.bodySmall!.copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
+                            155.w,
+                          );
+                          textSize = textSize + x.height + 4.w;
+                        }
+                        height = textSize + 16.w;
                       } else {
-                        final textSize = _measureTextSize(
-                          textTheme.bodySmall!.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                        );
-                        height = ((textSize.height * 2) + 24.w + 10) * widget.service!.reviews.length + 24.w;
+                        double textSize = 0;
+                        for (
+                          int i = 0;
+                          i < widget.service!.reviews.length;
+                          i++
+                        ) {
+                          final x = _measureTextSize(
+                            widget.service!.reviews[i].message,
+                            textTheme.bodySmall!.copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
+                            284.w,
+                          );
+                          textSize = textSize + x.height + 24.w + 10.w;
+                        }
+                        height = textSize + 24.w;
                       }
 
                       return SizedBox(
@@ -325,22 +366,41 @@ class _DetailServicePageState extends State<DetailServicePage>
                                 return Padding(
                                   padding: EdgeInsets.only(bottom: 4.w),
                                   child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       SizedBox(
                                         width:
                                             MediaQuery.sizeOf(context).width /
-                                            2,
+                                            2.5,
                                         child: Text(
-                                          widget.service!.facilities[index].name,
+                                          widget
+                                              .service!
+                                              .facilities[index]
+                                              .name,
                                           style: textTheme.bodySmall?.copyWith(
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),
                                       ),
                                       Text(
-                                        widget.service!.facilities[index].detail.toString(),
+                                        ": ",
                                         style: textTheme.bodySmall?.copyWith(
                                           fontWeight: FontWeight.w600,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 155.w,
+                                        child: Text(
+                                          widget
+                                              .service!
+                                              .facilities[index]
+                                              .detail
+                                              .toString(),
+                                          style: textTheme.bodySmall?.copyWith(
+                                            fontWeight: FontWeight.w600,
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -373,7 +433,10 @@ class _DetailServicePageState extends State<DetailServicePage>
                                         ),
                                         SizedBox(width: 12.w),
                                         Text(
-                                          widget.service!.reviews[index].userName,
+                                          widget
+                                              .service!
+                                              .reviews[index]
+                                              .userName,
                                           style: textTheme.bodySmall?.copyWith(
                                             fontWeight: FontWeight.w600,
                                             color: ColorValue.dark2Color,
@@ -410,7 +473,10 @@ class _DetailServicePageState extends State<DetailServicePage>
                                         SizedBox(width: 36.w),
                                         Expanded(
                                           child: Text(
-                                            widget.service!.reviews[index].message,
+                                            widget
+                                                .service!
+                                                .reviews[index]
+                                                .message,
                                             style: textTheme.bodySmall,
                                           ),
                                         ),
@@ -461,9 +527,7 @@ class _DetailServicePageState extends State<DetailServicePage>
                   ),
                 ),
                 Text(
-                  "Rp. ${widget.service!.price.toString().replaceAllMapped(
-                    RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-                    (Match m) => '${m[1]}.',)}",
+                  "Rp. ${widget.service!.price.toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]}.')}",
                   style: GoogleFonts.poppins(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w700,
@@ -504,12 +568,11 @@ class _DetailServicePageState extends State<DetailServicePage>
     );
   }
 
-  Size _measureTextSize(TextStyle style) {
+  Size _measureTextSize(String text, TextStyle style, double width) {
     final TextPainter textPainter = TextPainter(
-      text: TextSpan(text: "The fox jumps over the lazy dog", style: style),
-      maxLines: 1,
+      text: TextSpan(text: text, style: style),
       textDirection: ui.TextDirection.ltr,
-    )..layout(minWidth: 0, maxWidth: double.infinity);
+    )..layout(minWidth: width, maxWidth: width);
 
     return textPainter.size;
   }
@@ -529,7 +592,23 @@ class _DetailServicePageState extends State<DetailServicePage>
                   ),
                 ),
                 child: ClipRRect(
-                  child: Image.network(imageUrl, fit: BoxFit.fitWidth),
+                  child: Image.network(
+                    imageUrl,
+                    fit: BoxFit.cover,
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Image.asset(
+                        'assets/images/service/placeholder.png',
+                        fit: BoxFit.cover,
+                      );
+                    },
+                    errorBuilder: (context, error, stackTrace) {
+                      return Image.asset(
+                        'assets/images/service/error.png',
+                        fit: BoxFit.cover,
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
