@@ -8,6 +8,7 @@ import 'package:servista/features/auth/login/view/page/login_page.dart';
 import 'package:servista/features/auth/login/view/page/login_phone_page.dart';
 import 'package:servista/features/booking/page/detail_booking_page.dart';
 import 'package:servista/features/home/page/search_service_page.dart';
+import 'package:servista/features/payment/page/payment_page.dart';
 import 'package:servista/features/service/pages/detail_service_page.dart';
 import 'package:servista/features/service/pages/service_booking_page.dart';
 import 'package:servista/features/splash/view/page/splash_page.dart';

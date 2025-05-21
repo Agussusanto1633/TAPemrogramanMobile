@@ -57,6 +57,7 @@ dependencies:
   table_calendar: ^3.0.9
   shared_preferences: ^2.5.3
   page_transition: ^2.2.1
+  qr_flutter: ^4.1.0
 
 dev_dependencies:
   flutter_test:

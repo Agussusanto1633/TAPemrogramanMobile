@@ -6,6 +6,8 @@ class ServiceState {
   final String?  selectedTime;
   final String? selectedWorker, focusedWorker;
   final String? paymentMethod;
+  final String? selectedService;
+  final int? price;
 
 
   ServiceState({
@@ -15,6 +17,8 @@ class ServiceState {
     this.selectedWorker,
     this.focusedWorker,
     this.paymentMethod,
+    this.selectedService,
+    this.price,
   });
 
   ServiceState copyWith({
@@ -24,6 +28,8 @@ class ServiceState {
     String? selectedWorker,
     String? focusedWorker,
     String? paymentMethod,
+    String? selectedService,
+    int? price,
   }) {
     return ServiceState(
       selectedDate: selectedDate ?? this.selectedDate,
@@ -32,6 +38,8 @@ class ServiceState {
       selectedWorker: selectedWorker ?? this.selectedWorker,
       focusedWorker: focusedWorker ?? this.focusedWorker,
       paymentMethod: paymentMethod ?? this.paymentMethod,
+      selectedService: selectedService ?? this.selectedService,
+      price: price ?? this.price
     );
   }
 }

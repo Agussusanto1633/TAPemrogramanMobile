@@ -99,6 +99,49 @@ class _FirestorePageState extends State<FirestorePage> {
   ];
 
 
+  Future<void> createBooking({
+    required String userId,
+    required String serviceId,
+    required String workerId,
+    required String date, // Format: YYYY-MM-DD
+    required String time, // Format: HH:mm
+  }) async {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    final bookings = firestore.collection('bookings');
+
+    try {
+      // Cek apakah worker sudah terbooking di waktu tersebut
+      final snapshot = await bookings
+          .where('service_id', isEqualTo: serviceId)
+          .where('worker_id', isEqualTo: workerId)
+          .where('date', isEqualTo: date)
+          .where('time', isEqualTo: time)
+          .get();
+
+      if (snapshot.docs.isNotEmpty) {
+        print("⚠️ Worker sudah dibooking di jam ini!");
+        return;
+      }
+
+      // Data booking baru
+      final newBooking = {
+        'user_id': userId,
+        'service_id': serviceId,
+        'worker_id': workerId,
+        'date': date,
+        'time': time,
+        'status': 'confirmed',
+        'created_at': FieldValue.serverTimestamp(),
+      };
+
+      await bookings.add(newBooking);
+      print("✅ Booking berhasil ditambahkan!");
+    } catch (e) {
+      print("❌ Gagal menambahkan booking: $e");
+    }
+  }
+
+
 
 
   Future<void> addMultipleServices(List<Map<String, dynamic>> servicesData) async {
@@ -144,8 +187,16 @@ class _FirestorePageState extends State<FirestorePage> {
       appBar: AppBar(title: const Text('Post to Firestore')),
       body: Center(
         child: ElevatedButton(
-          onPressed: () {
-            addMultipleServices(dummyData);
+          onPressed: () async {
+            // addMultipleServices(dummyData);
+            await createBooking(
+                userId: 'user_001',
+                serviceId: 'potong-rumput-1747389442365',
+                workerId: 'pekerja_3',
+                date: '2025-05-19',
+                time: '16:00',
+            );
+
           },
           child: const Text("Tambah Data"),
         ),
