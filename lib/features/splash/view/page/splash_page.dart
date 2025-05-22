@@ -16,7 +16,7 @@ class AuthenticationPage extends StatefulWidget {
 class _AuthenticationPageState extends State<AuthenticationPage> {
   Future _initialize() async {
     User? user = FirebaseAuth.instance.currentUser;
-    await Future.delayed(const Duration(milliseconds: 100));
+    await Future.delayed(const Duration(milliseconds: 1));
     FlutterNativeSplash.remove();
 
     if (mounted) {
@@ -46,13 +46,6 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SizedBox.expand(
-        child: Image.asset(
-          'assets/images/splash/background.png',
-          fit: BoxFit.cover,
-        ),
-      ),
-    );
+    return Scaffold(body: Container());
   }
 }

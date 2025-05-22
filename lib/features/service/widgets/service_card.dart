@@ -18,9 +18,9 @@ class ServiceCard extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => DetailServicePage(
-          service: service,
-          )),
+          MaterialPageRoute(
+            builder: (context) => DetailServicePage(service: service),
+          ),
         );
       },
       child: Container(
@@ -57,21 +57,66 @@ class ServiceCard extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    height: 80.w,
-                    width: 80.w,
-                    decoration: ShapeDecoration(
-                      image: DecorationImage(
-                        image: NetworkImage(
-                          service?.image ??
-                              "https://example.com/default_image.jpg",
+                  Stack(
+                    children: [
+                      SizedBox(
+                        height: 80.w,
+                        width: 80.w,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20.r),
+                          child:
+                              service?.image == null
+                                  ? Image.asset(
+                                    'assets/images/service/error.png',
+                                    fit: BoxFit.cover,
+                                  )
+                                  : Image.network(
+                                    service!.image,
+                                    fit: BoxFit.cover,
+                                    loadingBuilder: (
+                                      context,
+                                      child,
+                                      loadingProgress,
+                                    ) {
+                                      if (loadingProgress == null) return child;
+                                      return Image.asset(
+                                        'assets/images/service/placeholder.png',
+                                        fit: BoxFit.cover,
+                                      );
+                                    },
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Image.asset(
+                                        'assets/images/service/error.png',
+                                        fit: BoxFit.cover,
+                                      );
+                                    },
+                                  ),
                         ),
-                        fit: BoxFit.cover,
                       ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.r),
+                      Positioned(
+                        right: 8.w,
+                        top: 8.w,
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 3.w,
+                            vertical: 5.w,
+                          ),
+                          decoration: BoxDecoration(
+                            color: ColorValue.primaryColor,
+                            borderRadius: BorderRadius.circular(50.r),
+                          ),
+                          child:
+                              service?.range == null
+                                  ? Container()
+                                  : Text(
+                                    "${service!.range.toString()} km",
+                                    style: textTheme.bodyLarge?.copyWith(
+                                      fontSize: 8.sp,
+                                    ),
+                                  ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                   SizedBox(width: 10.w),
                   Expanded(
@@ -95,6 +140,7 @@ class ServiceCard extends StatelessWidget {
                               "assets/icons/star.svg",
                               height: 14.w,
                               width: 15.w,
+                              color: ColorValue.primaryColor,
                             ),
                             SizedBox(width: 4.w),
                             Text(
@@ -104,9 +150,16 @@ class ServiceCard extends StatelessWidget {
                               ),
                             ),
                             SizedBox(width: 2.w),
-                            Text("(${service?.reviews.length.toString()})", style: textTheme.bodySmall),
+                            Text(
+                              "(${service?.reviews.length.toString()})",
+                              style: textTheme.bodySmall,
+                            ),
                             Spacer(),
-                            Text(Utils.formatRupiah(service?.price).toString() ?? "100", style: textTheme.titleSmall),
+                            Text(
+                              Utils.formatRupiah(service?.price).toString() ??
+                                  "100",
+                              style: textTheme.titleSmall,
+                            ),
                             SizedBox(width: 2.w),
                             Text("/jam", style: textTheme.bodySmall),
                           ],
@@ -129,14 +182,18 @@ class ServiceCard extends StatelessWidget {
                     ),
                   ),
                   Spacer(),
-                  SvgPicture.asset("assets/icons/discount.svg"),
+                  service?.discount != 0 && service?.discount != null
+                      ? SvgPicture.asset("assets/icons/discount.svg")
+                      : SizedBox(),
                   SizedBox(width: 4.w),
-                  Text(
-                    "Dapatkan Diskon 5%",
-                    style: textTheme.bodySmall?.copyWith(
-                      color: ColorValue.dark2Color,
-                    ),
-                  ),
+                  service?.discount != 0 && service?.discount != null
+                      ? Text(
+                        "Dapatkan Diskon ${service?.discount.toString()}%",
+                        style: textTheme.bodySmall?.copyWith(
+                          color: ColorValue.dark2Color,
+                        ),
+                      )
+                      : SizedBox(),
                 ],
               ),
             ),
