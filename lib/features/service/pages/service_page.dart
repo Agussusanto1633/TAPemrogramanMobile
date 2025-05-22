@@ -42,7 +42,9 @@ class _ServicePageState extends State<ServicePage> {
                     BlocBuilder<ServiceBloc, ServiceState>(
                       builder: (context, state) {
                         if (state is ServiceLoading) {
-                          return Center(child: CircularProgressIndicator());
+                          return Container(
+                            height: 134.h,
+                              child: Center(child: CircularProgressIndicator()));
                         } else if (state is ServicePromoLoaded) {
                           return ListView.builder(
                             shrinkWrap: true,
