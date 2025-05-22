@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:servista/core/transparent_appbar/transparent_appbar.dart';
 import 'package:servista/features/service/bloc/service_state.dart';
 
 import '../../../core/scroll/scroll_behavior.dart';
@@ -30,6 +31,7 @@ class _ServicePageState extends State<ServicePage> {
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
+      appBar: transparentAppBarWidget(),
       backgroundColor: ColorValue.bgFrameColor,
       body: ScrollConfiguration(
         behavior: NoOverScrollEffectBehavior(),
