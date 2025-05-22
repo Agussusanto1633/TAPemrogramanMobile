@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../core/scroll/scroll_behavior.dart';
 import '../../../core/theme/color_value.dart';
-import '../widgets/service_card.dart';
+import '../../service/widgets/service_card.dart';
 
 class SearchServicePage extends StatefulWidget {
   const SearchServicePage({super.key});
@@ -68,7 +68,7 @@ class _SearchServicePageState extends State<SearchServicePage> {
             Expanded(
               child: Container(
                 width: MediaQuery.of(context).size.width,
-                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                // padding: EdgeInsets.symmetric(horizontal: 20.w),
                 decoration: BoxDecoration(
                   color: ColorValue.bgFrameColor,
                   borderRadius: BorderRadius.only(
@@ -79,7 +79,10 @@ class _SearchServicePageState extends State<SearchServicePage> {
                 child: ListView.builder(
                   shrinkWrap: true,
                   physics: BouncingScrollPhysics(),
-                  padding: EdgeInsets.only(top: 20.w),
+                  padding: EdgeInsets.symmetric(
+                    vertical: 20.w,
+                    horizontal: 20.w,
+                  ),
                   itemCount: 8,
                   itemBuilder: (context, index) {
                     return ServiceCard();

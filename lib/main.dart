@@ -19,7 +19,9 @@ import 'core/nav_bar/nav_bar.dart';
 import 'core/theme/app_style.dart';
 import 'core/theme/app_theme.dart';
 import 'features/profile/page/profile_page.dart';
+import 'features/service/bloc/service_bloc.dart';
 import 'features/service/cubit/service_cubit.dart';
+import 'features/service/repositories/service_repository.dart';
 import 'firebase_options.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -31,10 +33,7 @@ Future<void> main() async {
   deviceOrientation();
   statusBarDarkStyle();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await initializeDateFormatting(
-    'id_ID',
-    null,
-  );
+  await initializeDateFormatting('id_ID', null);
 
   runApp(const MyApp());
 }
@@ -45,7 +44,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [BlocProvider(create: (context) => ServiceCubit())],
+      providers: [
+        BlocProvider(
+          create: (_) => ServiceBloc(serviceRepository: ServiceRepository()),
+        ),
+        BlocProvider(create: (_) => ServiceCubit()),
+      ],
       child: ScreenUtilInit(
         designSize: const Size(360, 640),
         minTextAdapt: true,
