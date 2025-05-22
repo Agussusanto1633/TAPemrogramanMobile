@@ -5,10 +5,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:servista/core/custom_widgets/custom_button_widget.dart';
+import 'package:servista/core/nav/nav.dart';
+import 'package:servista/core/theme/app_font_weight.dart';
 import 'package:servista/core/theme/color_value.dart';
 import 'package:servista/features/auth/login/bloc/auth_bloc.dart';
 import 'package:servista/features/auth/login/bloc/auth_service.dart';
 import 'package:servista/features/auth/login/bloc/auth_state.dart';
+import 'package:servista/features/auth/login/view/page/login_email_page.dart';
 import 'package:servista/home_dummy.dart';
 
 import '../../../../../core/nav_bar/nav_bar.dart';
@@ -22,18 +25,16 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocProvider(
         create: (context) => AuthBloc(AuthService()),
-        child: Center(
+        child: SafeArea(
           child: Column(
-            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Gap(120.h),
+              Gap(150.h),
               Text(
                 "Servista",
                 style: GoogleFonts.onest(
@@ -50,21 +51,18 @@ class _LoginPageState extends State<LoginPage> {
                   color: Color(0xff3F414E),
                 ),
               ),
-              SizedBox(height: 60.h),
-              Gap(90.h),
+              Spacer(),
               BlocConsumer<AuthBloc, AuthState>(
                 listener: (context, state) {
                   if (state is AuthSignedIn) {
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => NavBar(),
-                      ),
+                      MaterialPageRoute(builder: (context) => NavBar()),
                     );
                   } else if (state is AuthError) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(state.error)),
-                    );
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text(state.error)));
                   }
                 },
                 builder: (context, state) {
@@ -73,10 +71,11 @@ class _LoginPageState extends State<LoginPage> {
                     return CircularProgressIndicator();
                   }
 
-                  return
-                    InkWell(
+                  return InkWell(
                     onTap: () async {
-                      BlocProvider.of<AuthBloc>(context).add(AuthSignInWithGoogle());
+                      BlocProvider.of<AuthBloc>(
+                        context,
+                      ).add(AuthSignInWithGoogle());
                     },
 
                     child: Container(
@@ -101,7 +100,7 @@ class _LoginPageState extends State<LoginPage> {
                             style: GoogleFonts.poppins(
                               color: Color(0xff474747),
                               fontSize: 14.w,
-                              fontWeight: FontWeight.w600,
+                              fontWeight: AppFontWeight.semiBold,
                             ),
                           ),
                         ],
@@ -110,20 +109,26 @@ class _LoginPageState extends State<LoginPage> {
                   );
                 },
               ),
-
               Gap(16.h),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
-                child: CustomButtonWidget(
-                  label: "Daftar dengan nomor handphone",
-                  backgroundColor: ColorValue.darkColor,
-                  labelColor: Colors.white,
+                child: GestureDetector(
+                  onTap: () {
+                    Nav.to(context, LoginEmailPage());
+                  },
+                  child: CustomButtonWidget(
+                    label: "Login dengan Email",
+                    backgroundColor: ColorValue.darkColor,
+                    labelColor: Colors.white,
+                  ),
                 ),
               ),
+              Gap(19.h),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 12.w),
-                child: Divider(color: Colors.black, height: 40.h, thickness: 2),
+                child: Divider(color: Colors.black, height: 1, thickness: 2),
               ),
+              Gap(109.h),
             ],
           ),
         ),

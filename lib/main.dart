@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:servista/features/auth/login/bloc/auth_bloc.dart';
+import 'package:servista/features/auth/login/bloc/auth_service.dart';
 import 'package:servista/features/auth/login/view/page/login_otp_page.dart';
 import 'package:servista/features/auth/login/view/page/login_page.dart';
 import 'package:servista/features/auth/login/view/page/login_phone_page.dart';
@@ -46,7 +48,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [BlocProvider(create: (context) => ServiceCubit())],
+      providers: [BlocProvider(create: (context) => ServiceCubit()),
+      BlocProvider(create: (context) => AuthBloc(AuthService()),)
+      ],
       child: ScreenUtilInit(
         designSize: const Size(360, 640),
         minTextAdapt: true,
