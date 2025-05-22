@@ -9,6 +9,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:servista/core/custom_widgets/custom_button_widget.dart';
+import 'package:servista/core/nav/nav.dart';
+import 'package:servista/features/payment/page/payment_successful_page.dart';
 import 'package:servista/features/service/cubit/service_cubit.dart';
 import 'package:servista/features/service/widgets/bottom_sheets_widgets/bottom_sheets/payment_method_bottom_sheet.dart';
 
@@ -308,8 +310,7 @@ class _PaymentPageState extends State<PaymentPage> {
                                                       children: [
                                                         QrImageView(
                                                           data:
-                                                              "https://example.com",
-                                                          // Ganti dengan data yang kamu mau
+                                                              "0812345678910 a.n Servista",
                                                           version:
                                                               QrVersions.auto,
                                                           size:
@@ -427,7 +428,11 @@ class _PaymentPageState extends State<PaymentPage> {
                               ],
                             ),
                             Gap(10.h),
-                            CustomButtonWidget(label: "Konfirmasi Pembayaran"),
+                            GestureDetector(
+                              onTap: () {
+                                Nav.to(context, const PaymentSuccessfulPage());
+                              },
+                                child: CustomButtonWidget(label: "Konfirmasi Pembayaran")),
                           ],
                         ),
                       ),
