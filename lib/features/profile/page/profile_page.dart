@@ -11,6 +11,7 @@ import 'package:servista/features/profile/widgets/profile_header.dart';
 import 'package:servista/features/profile/widgets/profile_menu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../core/transparent_appbar/transparent_appbar.dart';
 import '../../auth/login/bloc/auth_bloc.dart';
 import '../../auth/login/bloc/auth_event.dart';
 import '../../auth/login/view/page/login_page.dart';
@@ -35,6 +36,7 @@ class _ProfilePageState extends State<ProfilePage> {
     super.initState();
     loadUserData();
   }
+
   Future<void> loadUserData() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -48,13 +50,11 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => AuthBloc(AuthService()),
-        ),
-      ],
+      providers: [BlocProvider(create: (context) => AuthBloc(AuthService()))],
       child: Scaffold(
         backgroundColor: ColorValue.darkColor,
+        appBar: transparentAppBarWidget(isDarkStyle: false),
+
         body: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
@@ -71,7 +71,12 @@ class _ProfilePageState extends State<ProfilePage> {
                   Center(
                     child: Column(
                       children: [
-                        ProfileHeader(userName: displayName, userPhotoURL: photoUrl, userEmail: email, userPhoneNumber: phoneNumber ),
+                        ProfileHeader(
+                          userName: displayName,
+                          userPhotoURL: photoUrl,
+                          userEmail: email,
+                          userPhoneNumber: phoneNumber,
+                        ),
                         Gap(18.h),
                         ProfileMenu(
                           title: "Ubah Profil",
@@ -96,7 +101,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 MaterialPageRoute(
                                   builder: (context) => const LoginPage(),
                                 ),
-                                    (route) => false,
+                                (route) => false,
                               );
                             }
                           },

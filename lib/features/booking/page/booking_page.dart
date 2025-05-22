@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:servista/features/booking/page/booking_ongoing_page.dart';
 
 import '../../../core/theme/color_value.dart';
+import '../../../core/transparent_appbar/transparent_appbar.dart';
 
 class BookingPage extends StatefulWidget {
   const BookingPage({Key? key}) : super(key: key);
@@ -18,6 +19,7 @@ class _BookingPageState extends State<BookingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorValue.bgFrameColor,
+      appBar: transparentAppBarWidget(),
       body: SafeArea(
         child: DefaultTabController(
           length: 2,
