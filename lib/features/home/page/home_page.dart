@@ -255,7 +255,9 @@ class _HomePageState extends State<HomePage> {
                   BlocBuilder<ServiceBloc, ServiceState>(
                     builder: (context, state) {
                       if (state is ServiceLoading) {
-                        return Center(child: CircularProgressIndicator());
+                    return Container(
+                            height: 285.h,
+                              child: Center(child: CircularProgressIndicator()));
                       } else if (state is ServiceSuccess) {
                         print("Loading services... ${state.toString()}");
                         return SizedBox(
