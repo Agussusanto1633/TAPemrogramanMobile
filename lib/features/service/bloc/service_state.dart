@@ -12,13 +12,17 @@ class ServiceInitial extends ServiceState {}
 
 class ServiceLoading extends ServiceState {}
 
-class ServiceLoadSuccess extends ServiceState {
+class ServiceSuccess extends ServiceState {
   final List<ServiceModel> services;
+  final List<ServiceModel> promoServices;
 
-  const ServiceLoadSuccess(this.services);
+  const ServiceSuccess({
+    required this.services,
+    required this.promoServices,
+  });
 
   @override
-  List<Object> get props => [services];
+  List<Object> get props => [services, promoServices];
 }
 
 class ServiceDetailLoaded extends ServiceState {
