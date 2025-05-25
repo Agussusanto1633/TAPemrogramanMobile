@@ -39,6 +39,17 @@ class ServiceCubit extends Cubit<ServiceState> {
   }
 
   void reset() {
-    emit(ServiceState());
+    emit(
+      ServiceState(
+        selectedDate: null,
+        selectedTime: null,
+        selectedWorker: null,
+        paymentMethod: null,
+        price: null,
+        focusedDate: null,
+        focusedWorker: null,
+        selectedService: null,
+      ),
+    );
   }
 }

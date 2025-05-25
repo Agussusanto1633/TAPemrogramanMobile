@@ -151,17 +151,15 @@ Future<String?> showWorkerBottomSheet(
                         focusedWorker == null
                             ? null
                             : () {
-                              selectedWorker == null
-                                  ? Navigator.push(
+                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder:
                                           (context) => ServiceBookingPage(),
                                     ),
-                                  )
-                                  : Navigator.pop(context);
-                              cubit.setSelectedWorker(focusedWorker);
-                            },
+                                   );
+                                   cubit.setSelectedWorker(focusedWorker);
+                        },
                     child: Text(
                       "Pilih Pekerja",
                       style: GoogleFonts.mulish(
