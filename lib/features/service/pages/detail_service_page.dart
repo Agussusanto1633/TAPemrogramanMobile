@@ -565,7 +565,7 @@ class _DetailServicePageState extends State<DetailServicePage>
                     //cubit
                     cubit.setSelectedService(widget.service!.name);
                     cubit.setPrice(widget.service!.price);
-                    startBookingFlow(context);
+                    startBookingFlow(context, widget.service!);
                   },
                   child: Text(
                     "Sewa Sekarang",

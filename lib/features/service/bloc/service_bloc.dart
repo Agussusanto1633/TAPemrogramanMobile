@@ -11,6 +11,8 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
       super(ServiceInitial()) {
     on<LoadAllServices>(_onLoadAllServices);
     on<LoadServiceDetail>(_onLoadServiceDetail);
+    on<LoadTimeSlotStatuses>(_onLoadTimeSlotStatuses);
+    on<LoadWorkerSlotStatuses>(_onLoadWorkerSlotStatuses);
   }
 
   Future<void> _onLoadAllServices(
@@ -44,4 +46,38 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
     }
   }
 
+  Future<void> _onLoadTimeSlotStatuses(
+    LoadTimeSlotStatuses event,
+    Emitter<ServiceState> emit,
+  ) async {
+    emit(ServiceLoading());
+    try {
+      final statuses = await _serviceRepository.getTimeSlotStatuses(
+        serviceId: event.serviceId,
+        selectedDate: event.selectedDate,
+        service: event.service,
+      );
+      emit(TimeSlotStatusesLoaded(statuses: statuses, selectedTime: null));
+    } catch (e) {
+      emit(ServiceLoadFailure(e.toString()));
+    }
+  }
+
+  Future<void> _onLoadWorkerSlotStatuses(
+    LoadWorkerSlotStatuses event,
+    Emitter<ServiceState> emit,
+  ) async {
+    emit(ServiceLoading());
+    try {
+      final statuses = await _serviceRepository.getWorkerStatusesForSlot(
+        service: event.service,
+        selectedDate: event.selectedDate,
+        selectedTimeSlot: event.selectedTime,
+        serviceId: event.serviceId,
+      );
+      emit(WorkerSlotStatusesLoaded(workerStatuses:statuses));
+    } catch (e) {
+      emit(ServiceLoadFailure(e.toString()));
+    }
+  }
 }

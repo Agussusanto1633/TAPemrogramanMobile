@@ -37,6 +37,8 @@ Future<void> main() async {
   statusBarDarkStyle();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await initializeDateFormatting('id_ID', null);
+  await Future.delayed(const Duration(milliseconds: 1));
+  FlutterNativeSplash.remove();
 
   runApp(const MyApp());
 }
@@ -65,7 +67,7 @@ class MyApp extends StatelessWidget {
             home: child,
           );
         },
-        child: AuthenticationPage(),
+        child: HomePage(),
       ),
     );
   }

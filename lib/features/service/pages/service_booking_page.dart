@@ -157,7 +157,9 @@ class _ServiceBookingPageState extends State<ServiceBookingPage> {
                                       ),
                                       Spacer(),
                                       GestureDetector(
-                                        onTap: () => startBookingFlow(context),
+                                        onTap: () {
+
+                                        },
                                         child: Container(
                                           padding: EdgeInsets.all(10.w),
                                           decoration: BoxDecoration(

@@ -6,11 +6,17 @@ class ServiceModel {
   final double range;
   final double rating;
   final int discount;
-  final int price;
+  final int price; // Tetap menggunakan 'price' sesuai permintaanmu
   final String linkMaps;
   final List<Facility> facilities;
   final List<String> photos;
   final List<Review> reviews;
+
+  // --- Field tambahan untuk booking ---
+  final int serviceDurationMinutes;
+  final List<String> operatingDays;
+  final List<String> availableTimeSlots;
+  final List<String> workerNames;
 
   ServiceModel({
     required this.id,
@@ -25,6 +31,11 @@ class ServiceModel {
     required this.facilities,
     required this.photos,
     required this.reviews,
+    // --- Inisialisasi field tambahan ---
+    required this.serviceDurationMinutes,
+    required this.operatingDays,
+    required this.availableTimeSlots,
+    required this.workerNames,
   });
 
   factory ServiceModel.fromJson(Map<String, dynamic> json, String docId) {
@@ -33,14 +44,26 @@ class ServiceModel {
       name: json['name'] ?? '',
       address: json['address'] ?? '',
       image: json['image'] ?? '',
-      range: (json['range'] ?? 0).toDouble(),
-      rating: (json['rating'] ?? 0).toDouble(),
+      range: (json['range'] ?? 0.0).toDouble(), // Pastikan ada 'range' di JSON atau default value
+      rating: (json['rating'] ?? 0.0).toDouble(),
       discount: json['discount'] ?? 0,
       price: json['price'] ?? 0,
       linkMaps: json['link_maps'] ?? '',
-      facilities: (json['facilities'] as Map<String, dynamic>?)?.entries.map((entry) => Facility.fromJson(entry.key, entry.value)).toList() ?? [],
+      facilities: (json['facilities'] as Map<String, dynamic>?)
+          ?.entries
+          .map((entry) => Facility.fromJson(entry.key, entry.value))
+          .toList() ??
+          [],
       photos: List<String>.from(json['photos'] ?? []),
-      reviews: (json['reviews'] ?? []).map<Review>((item) => Review.fromJson(item)).toList(),
+      reviews: (json['reviews'] as List<dynamic>?)
+          ?.map<Review>((item) => Review.fromJson(item as Map<String, dynamic>))
+          .toList() ??
+          [],
+      // --- Parsing field tambahan ---
+      serviceDurationMinutes: json['serviceDurationMinutes'] ?? 0,
+      operatingDays: List<String>.from(json['operatingDays'] ?? []),
+      availableTimeSlots: List<String>.from(json['availableTimeSlots'] ?? []),
+      workerNames: List<String>.from(json['workerNames'] ?? []),
     );
   }
 
@@ -54,16 +77,21 @@ class ServiceModel {
       'discount': discount,
       'price': price,
       'link_maps': linkMaps,
-      'facilities': { for (var facility in facilities) facility.name : facility.toJson() },
+      'facilities': {for (var facility in facilities) facility.name: facility.toJsonValue()}, // Menggunakan toJsonValue() dari Facility
       'photos': photos,
       'reviews': reviews.map((item) => item.toJson()).toList(),
+      // --- Serialisasi field tambahan ---
+      'serviceDurationMinutes': serviceDurationMinutes,
+      'operatingDays': operatingDays,
+      'availableTimeSlots': availableTimeSlots,
+      'workerNames': workerNames,
     };
   }
 }
 
 class Facility {
   final String name;
-  final dynamic detail;
+  final dynamic detail; // Bisa String, int, bool dll tergantung value di JSON
 
   Facility({
     required this.name,
@@ -77,7 +105,8 @@ class Facility {
     );
   }
 
-  Map<String, dynamic> toJson() {
+  // Mengembalikan value dari facility, karena di JSON services, facilities adalah Map<String, dynamic>
+  dynamic toJsonValue() {
     return detail;
   }
 }
@@ -103,7 +132,7 @@ class Review {
       userName: json['user_name'] ?? '',
       userPhoto: json['user_photo'] ?? '',
       message: json['message'] ?? '',
-      rating: (json['rating'] ?? 0).toDouble(),
+      rating: (json['rating'] ?? 0.0).toDouble(),
     );
   }
 

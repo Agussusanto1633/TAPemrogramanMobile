@@ -3,12 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:servista/core/nav/nav.dart';
 import 'package:servista/core/theme/color_value.dart';
 import 'package:servista/features/auth/login/bloc/auth_service.dart';
 import 'package:servista/features/auth/login/bloc/auth_state.dart';
 import 'package:servista/features/profile/bloc/profile_bloc.dart';
 import 'package:servista/features/profile/widgets/profile_header.dart';
 import 'package:servista/features/profile/widgets/profile_menu.dart';
+import 'package:servista/firestore/firestore_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/transparent_appbar/transparent_appbar.dart';
@@ -78,9 +80,12 @@ class _ProfilePageState extends State<ProfilePage> {
                           userPhoneNumber: phoneNumber,
                         ),
                         Gap(18.h),
-                        ProfileMenu(
-                          title: "Ubah Profil",
-                          icon: "assets/icons/profile.svg",
+                        GestureDetector(
+                          onTap: () => Nav.to(context, FirestorePage()),
+                          child: ProfileMenu(
+                            title: "Ubah Profil",
+                            icon: "assets/icons/profile.svg",
+                          ),
                         ),
                         Gap(10.h),
                         ProfileMenu(
