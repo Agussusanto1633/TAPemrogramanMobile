@@ -106,7 +106,7 @@ class _DetailServicePageState extends State<DetailServicePage>
                           );
                         },
                       ),
-      
+
                       Align(
                         alignment: Alignment.bottomRight,
                         child: Padding(
@@ -117,7 +117,8 @@ class _DetailServicePageState extends State<DetailServicePage>
                               reverse: true,
                               scrollDirection: Axis.horizontal,
                               itemCount: widget.service!.photos.length,
-                              separatorBuilder: (_, __) => SizedBox(width: 10.w),
+                              separatorBuilder:
+                                  (_, __) => SizedBox(width: 10.w),
                               itemBuilder: (context, index) {
                                 final imageUrl = widget.service!.photos[index];
                                 return GestureDetector(
@@ -129,7 +130,9 @@ class _DetailServicePageState extends State<DetailServicePage>
                                           width: 1,
                                           color: Colors.white,
                                         ),
-                                        borderRadius: BorderRadius.circular(10.r),
+                                        borderRadius: BorderRadius.circular(
+                                          10.r,
+                                        ),
                                       ),
                                     ),
                                     child: ClipRRect(
@@ -177,7 +180,10 @@ class _DetailServicePageState extends State<DetailServicePage>
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(widget.service!.name, style: textTheme.displaySmall),
+                        Text(
+                          widget.service!.name,
+                          style: textTheme.displaySmall,
+                        ),
                         Container(
                           padding: EdgeInsets.all(5.w),
                           decoration: BoxDecoration(
@@ -274,7 +280,8 @@ class _DetailServicePageState extends State<DetailServicePage>
                               ),
                               SizedBox(height: 5.w),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     "Buka di Google Maps",
@@ -304,7 +311,9 @@ class _DetailServicePageState extends State<DetailServicePage>
                     TabBar(
                       controller: _tabController,
                       labelColor: ColorValue.darkColor,
-                      unselectedLabelColor: ColorValue.darkColor.withOpacity(0.5),
+                      unselectedLabelColor: ColorValue.darkColor.withOpacity(
+                        0.5,
+                      ),
                       indicatorColor: ColorValue.primaryColor,
                       padding: EdgeInsets.zero,
                       labelPadding: EdgeInsets.only(bottom: 7.w),
@@ -323,7 +332,7 @@ class _DetailServicePageState extends State<DetailServicePage>
                       animation: _tabController,
                       builder: (context, child) {
                         final tabIndex = _tabController.index;
-      
+
                         double height;
                         if (tabIndex == 0) {
                           double textSize = 0;
@@ -360,7 +369,7 @@ class _DetailServicePageState extends State<DetailServicePage>
                           }
                           height = textSize + 24.w;
                         }
-      
+
                         return SizedBox(
                           height: height,
                           child: TabBarView(
@@ -387,9 +396,10 @@ class _DetailServicePageState extends State<DetailServicePage>
                                                 .service!
                                                 .facilities[index]
                                                 .name,
-                                            style: textTheme.bodySmall?.copyWith(
-                                              fontWeight: FontWeight.w600,
-                                            ),
+                                            style: textTheme.bodySmall
+                                                ?.copyWith(
+                                                  fontWeight: FontWeight.w600,
+                                                ),
                                           ),
                                         ),
                                         Text(
@@ -407,9 +417,10 @@ class _DetailServicePageState extends State<DetailServicePage>
                                                 .facilities[index]
                                                 .detail
                                                 .toString(),
-                                            style: textTheme.bodySmall?.copyWith(
-                                              fontWeight: FontWeight.w600,
-                                            ),
+                                            style: textTheme.bodySmall
+                                                ?.copyWith(
+                                                  fontWeight: FontWeight.w600,
+                                                ),
                                           ),
                                         ),
                                       ],
@@ -446,10 +457,11 @@ class _DetailServicePageState extends State<DetailServicePage>
                                                 .service!
                                                 .reviews[index]
                                                 .userName,
-                                            style: textTheme.bodySmall?.copyWith(
-                                              fontWeight: FontWeight.w600,
-                                              color: ColorValue.dark2Color,
-                                            ),
+                                            style: textTheme.bodySmall
+                                                ?.copyWith(
+                                                  fontWeight: FontWeight.w600,
+                                                  color: ColorValue.dark2Color,
+                                                ),
                                           ),
                                           SizedBox(width: 5.w),
                                           SvgPicture.asset(
@@ -465,9 +477,8 @@ class _DetailServicePageState extends State<DetailServicePage>
                                             ),
                                             decoration: BoxDecoration(
                                               color: ColorValue.primaryColor,
-                                              borderRadius: BorderRadius.circular(
-                                                3.r,
-                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(3.r),
                                             ),
                                             child: Text(
                                               "${widget.service!.reviews[index].rating}/5",
@@ -549,35 +560,39 @@ class _DetailServicePageState extends State<DetailServicePage>
               BlocBuilder<ServiceCubit, ServiceState>(
                 builder: (context, state) {
                   return SizedBox(
-                width: double.infinity,
-                height: 50.w,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: ColorValue.primaryColor,
-                    padding: EdgeInsets.zero,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.r),
+                    width: double.infinity,
+                    height: 50.w,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: ColorValue.primaryColor,
+                        padding: EdgeInsets.zero,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
+                        elevation: 0,
+                      ),
+
+                      onPressed: () {
+                        //cubit
+                        cubit.setSelectedService(widget.service!.name);
+                        cubit.setPrice(widget.service!.price);
+                        cubit.setServiceModel(widget.service!);
+                        startBookingFlow(
+                          context,
+                          context.read<ServiceCubit>().state.serviceModel!,
+                        );
+                      },
+                      child: Text(
+                        "Sewa Sekarang",
+                        style: GoogleFonts.poppins(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w600,
+                          color: ColorValue.darkColor,
+                        ),
+                      ),
                     ),
-                    elevation: 0,
-                  ),
-      
-                  onPressed: () {
-                    //cubit
-                    cubit.setSelectedService(widget.service!.name);
-                    cubit.setPrice(widget.service!.price);
-                    startBookingFlow(context, widget.service!);
-                  },
-                  child: Text(
-                    "Sewa Sekarang",
-                    style: GoogleFonts.poppins(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w600,
-                      color: ColorValue.darkColor,
-                    ),
-                  ),
-                ),
-              );
-                  },
+                  );
+                },
               ),
             ],
           ),

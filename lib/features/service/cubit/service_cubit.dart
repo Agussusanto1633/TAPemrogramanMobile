@@ -1,6 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
+import '../model/service_model.dart';
+
 part 'service_state.dart';
 
 class ServiceCubit extends Cubit<ServiceState> {
@@ -38,6 +40,10 @@ class ServiceCubit extends Cubit<ServiceState> {
     emit(state.copyWith(price: price));
   }
 
+  void setServiceModel(ServiceModel serviceModel) {
+    emit(state.copyWith(serviceModel: serviceModel));
+  }
+
   void reset() {
     emit(
       ServiceState(
@@ -49,6 +55,7 @@ class ServiceCubit extends Cubit<ServiceState> {
         focusedDate: null,
         focusedWorker: null,
         selectedService: null,
+        serviceModel: null,
       ),
     );
   }
