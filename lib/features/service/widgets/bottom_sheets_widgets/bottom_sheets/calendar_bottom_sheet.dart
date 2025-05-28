@@ -35,9 +35,9 @@ Future<DateTime?> showCalendarBottomSheet(BuildContext context) {
                       child: Text(
                         toBeginningOfSentenceCase(
                               DateFormat(
-                                "EEEE, d MMMM yyyy",
+                                "MMMM yyyy",
                                 'id_ID',
-                              ).format(selectedDate),
+                              ).format(focusedDate),
                             ) ??
                             '',
                         style: GoogleFonts.inter(
@@ -107,6 +107,10 @@ Future<DateTime?> showCalendarBottomSheet(BuildContext context) {
                       return;
                     }
                     cubit.setSelectedDate(selectedDay);
+                    cubit.setFocusedDate(focusDay);
+                  },
+                  onPageChanged: (focusedDay) {
+                    cubit.setFocusedDate(focusedDay);
                   },
                   headerVisible: false,
                   calendarStyle: CalendarStyle(
@@ -137,10 +141,10 @@ Future<DateTime?> showCalendarBottomSheet(BuildContext context) {
                   calendarBuilders: CalendarBuilders(
                     selectedBuilder:
                         (context, date, _) => Container(
-                          margin: const EdgeInsets.all(6),
+                          margin: EdgeInsets.all(6.w),
                           decoration: BoxDecoration(
                             color: ColorValue.primaryColor,
-                            borderRadius: BorderRadius.circular(5),
+                            borderRadius: BorderRadius.circular(5.r),
                           ),
                           alignment: Alignment.center,
                           child: Text(
@@ -153,10 +157,10 @@ Future<DateTime?> showCalendarBottomSheet(BuildContext context) {
                         ),
                     todayBuilder:
                         (context, date, _) => Container(
-                          margin: const EdgeInsets.all(6),
+                          margin: EdgeInsets.all(6.w),
                           decoration: BoxDecoration(
                             color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(5),
+                            borderRadius: BorderRadius.circular(5.r),
                           ),
                           alignment: Alignment.center,
                           child: Text(
