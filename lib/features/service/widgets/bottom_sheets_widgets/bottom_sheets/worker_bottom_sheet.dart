@@ -57,6 +57,7 @@ class __TimeSelectionInteractiveAreaState
         final focusedWorker = state.focusedWorker;
         final selectedWorker = state.selectedWorker;
 
+
         return Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -207,8 +208,10 @@ class __TimeSelectionInteractiveAreaState
                                 ),
                               )
                               : Navigator.pop(context);
+
                           cubit.setSelectedWorker(focusedWorker);
-                        },
+
+                    },
                 child: Text(
                   "Hire",
                   style: GoogleFonts.mulish(

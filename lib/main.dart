@@ -23,6 +23,7 @@ import 'package:servista/home_dummy.dart';
 import 'core/nav_bar/nav_bar.dart';
 import 'core/theme/app_style.dart';
 import 'core/theme/app_theme.dart';
+import 'features/payment/cubit/payment_cubit.dart';
 import 'features/profile/page/profile_page.dart';
 import 'features/service/bloc/service_bloc.dart';
 import 'features/service/cubit/service_cubit.dart';
@@ -57,6 +58,7 @@ class MyApp extends StatelessWidget {
           create: (_) => ServiceBloc(serviceRepository: ServiceRepository()),
         ),
         BlocProvider(create: (_) => ServiceCubit()),
+        BlocProvider(create: (_) => PaymentCubit()),
       ],
       child: ScreenUtilInit(
         designSize: const Size(360, 640),
@@ -69,7 +71,7 @@ class MyApp extends StatelessWidget {
             home: child,
           );
         },
-        child: AdminIncomePage(),
+        child: AuthenticationPage(),
       ),
     );
   }
