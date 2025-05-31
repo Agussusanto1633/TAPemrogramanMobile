@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:servista/admin/features/home/page/admin_home_page.dart';
+import 'package:servista/admin/features/income/page/admin_income_page.dart';
 import 'package:servista/features/auth/login/bloc/auth_bloc.dart';
 import 'package:servista/features/auth/login/bloc/auth_service.dart';
 import 'package:servista/features/auth/login/view/page/login_otp_page.dart';
