@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:servista/features/service/model/service_model.dart';
+import '../../cubit/service_cubit.dart';
 import 'bottom_sheets/calendar_bottom_sheet.dart';
 import 'bottom_sheets/time_bottom_sheet.dart';
 import 'bottom_sheets/worker_bottom_sheet.dart';
 
-Future<void> startBookingFlow(BuildContext context, ServiceModel serviceModel) async {
+Future<void> startBookingFlow(
+  BuildContext context,
+  ServiceModel serviceModel,
+) async {
   final selectedDate = await showCalendarBottomSheet(context);
   if (selectedDate == null) return;
 
-  final selectedTime = await showTimeBottomSheet(context, selectedDate, serviceModel);
+  final selectedTime = await showTimeBottomSheet(
+    context,
+    selectedDate,
+    serviceModel,
+  );
   if (selectedTime == null) return;
 
   final selectedWorker = await showWorkerBottomSheet(

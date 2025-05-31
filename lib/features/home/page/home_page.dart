@@ -26,7 +26,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<String> locations = ['Malang', 'Surabaya', 'Jakarta', 'Bandung'];
   String selectedLocation = 'Malang';
-  late ServiceBloc serviceBloc;
   String displayName = '';
   String email = '';
   String photoUrl = '';
@@ -46,13 +45,6 @@ class _HomePageState extends State<HomePage> {
       email = prefs.getString('user_email') ?? 'Unknown';
       photoUrl = prefs.getString('user_photoURL') ?? '';
     });
-  }
-
-
-  @override
-  void dispose() {
-    serviceBloc.close();
-    super.dispose();
   }
 
   @override
@@ -202,9 +194,7 @@ class _HomePageState extends State<HomePage> {
                                         value: value,
                                         child: Text(
                                           value,
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                          ),
+                                          style: TextStyle(color: Colors.white),
                                         ),
                                       );
                                     }).toList(),
@@ -256,9 +246,10 @@ class _HomePageState extends State<HomePage> {
                   BlocBuilder<ServiceBloc, ServiceState>(
                     builder: (context, state) {
                       if (state is ServiceLoading) {
-                    return Container(
-                            height: 285.h,
-                              child: Center(child: CircularProgressIndicator()));
+                        return Container(
+                          height: 285.h,
+                          child: Center(child: CircularProgressIndicator()),
+                        );
                       } else if (state is ServiceSuccess) {
                         print("Loading services... ${state.toString()}");
                         return SizedBox(
@@ -268,10 +259,7 @@ class _HomePageState extends State<HomePage> {
                             itemCount: state.services.length,
                             scrollDirection: Axis.horizontal,
                             shrinkWrap: true,
-                            padding: EdgeInsets.only(
-                              bottom: 60.h,
-                              left: 20.w,
-                            ),
+                            padding: EdgeInsets.only(bottom: 60.h, left: 20.w),
                             itemBuilder: (context, index) {
                               return HomeCard(
                                 service: state.services[index],

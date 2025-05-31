@@ -24,25 +24,46 @@ class ServiceState {
 
   ServiceState copyWith({
     DateTime? selectedDate,
+    bool clearSelectedDate = false,
+
     DateTime? focusedDate,
+    bool clearFocusedDate = false,
+
     String? selectedTime,
+    bool clearSelectedTime = false,
+
     String? selectedWorker,
+    bool clearSelectedWorker = false,
     String? focusedWorker,
+    bool clearFocusedWorker = false,
     String? paymentMethod,
+    bool clearPaymentMethod = false,
     String? selectedService,
+    bool clearSelectedService = false,
     int? price,
+    bool clearPrice = false,
     ServiceModel? serviceModel,
+    bool clearServiceModel = false,
   }) {
     return ServiceState(
-      selectedDate: selectedDate ?? this.selectedDate,
-      focusedDate: focusedDate ?? this.focusedDate,
-      selectedTime: selectedTime ?? this.selectedTime,
-      selectedWorker: selectedWorker ?? this.selectedWorker,
-      focusedWorker: focusedWorker ?? this.focusedWorker,
-      paymentMethod: paymentMethod ?? this.paymentMethod,
-      selectedService: selectedService ?? this.selectedService,
-      price: price ?? this.price,
-      serviceModel: serviceModel ?? this.serviceModel,
+      selectedDate:
+          clearSelectedDate ? null : (selectedDate ?? this.selectedDate),
+      focusedDate: clearFocusedDate ? null : (focusedDate ?? this.focusedDate),
+      selectedTime:
+          clearSelectedTime ? null : (selectedTime ?? this.selectedTime),
+      selectedWorker:
+          clearSelectedWorker ? null : (selectedWorker ?? this.selectedWorker),
+      focusedWorker:
+          clearFocusedWorker ? null : (focusedWorker ?? this.focusedWorker),
+      paymentMethod:
+          clearPaymentMethod ? null : (paymentMethod ?? this.paymentMethod),
+      selectedService:
+          clearSelectedService
+              ? null
+              : (selectedService ?? this.selectedService),
+      price: clearPrice ? null : (price ?? this.price),
+      serviceModel:
+          clearServiceModel ? null : (serviceModel ?? this.serviceModel),
     );
   }
 }

@@ -20,12 +20,16 @@ class ServiceCubit extends Cubit<ServiceState> {
     emit(state.copyWith(selectedTime: time));
   }
 
-  void setSelectedWorker(String worker) {
+  void setSelectedWorker(worker) {
     emit(state.copyWith(selectedWorker: worker, focusedWorker: worker));
   }
 
-  void setFocusedWorker(String worker) {
+  void setFocusedWorker(worker) {
     emit(state.copyWith(focusedWorker: worker));
+  }
+
+  void resetWorker() {
+    emit(state.copyWith(clearSelectedWorker: true, clearFocusedWorker: true));
   }
 
   void setPaymentMethod(String method) {
@@ -46,16 +50,11 @@ class ServiceCubit extends Cubit<ServiceState> {
 
   void reset() {
     emit(
-      ServiceState(
-        selectedDate: null,
-        selectedTime: null,
-        selectedWorker: null,
-        paymentMethod: null,
-        price: null,
-        focusedDate: null,
-        focusedWorker: null,
-        selectedService: null,
-        serviceModel: null,
+      state.copyWith(
+        clearFocusedDate: true,
+        clearSelectedTime: true,
+        clearSelectedWorker: true,
+        clearFocusedWorker: true,
       ),
     );
   }

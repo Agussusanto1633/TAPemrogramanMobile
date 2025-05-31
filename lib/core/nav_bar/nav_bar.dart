@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:servista/core/theme/color_value.dart';
 import 'package:servista/features/booking/page/booking_page.dart';
@@ -6,6 +7,8 @@ import 'package:servista/features/home/page/home_page.dart';
 import 'package:servista/features/profile/page/profile_page.dart';
 import 'package:servista/features/service/pages/service_page.dart';
 import 'package:servista/home_dummy.dart';
+
+import '../../features/service/cubit/service_cubit.dart';
 
 class NavBar extends StatefulWidget {
   const NavBar({super.key});
