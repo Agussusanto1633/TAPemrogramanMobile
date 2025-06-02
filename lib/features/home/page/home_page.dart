@@ -246,7 +246,7 @@ class _HomePageState extends State<HomePage> {
                   BlocBuilder<ServiceBloc, ServiceState>(
                     builder: (context, state) {
                       if (state is ServiceLoading) {
-                        return Container(
+                        return SizedBox(
                           height: 285.h,
                           child: Center(child: CircularProgressIndicator()),
                         );
