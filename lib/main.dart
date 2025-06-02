@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,6 +24,7 @@ import 'package:servista/home_dummy.dart';
 import 'core/nav_bar/nav_bar.dart';
 import 'core/theme/app_style.dart';
 import 'core/theme/app_theme.dart';
+import 'features/booking/bloc/booking_bloc.dart';
 import 'features/payment/cubit/payment_cubit.dart';
 import 'features/profile/page/profile_page.dart';
 import 'features/service/bloc/service_bloc.dart';
@@ -59,6 +61,7 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(create: (_) => ServiceCubit()),
         BlocProvider(create: (_) => PaymentCubit()),
+        BlocProvider(create: (_) => BookingBloc(firestore: FirebaseFirestore.instance)),
       ],
       child: ScreenUtilInit(
         designSize: const Size(360, 640),
