@@ -2,22 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:servista/core/nav/nav.dart';
 import 'package:servista/core/theme/color_value.dart';
+import 'package:servista/features/booking/model/booking_model.dart';
 import 'package:servista/features/booking/page/detail_booking_page.dart';
+import 'package:servista/features/service/model/service_model.dart';
 
 class BookingList extends StatelessWidget {
-  //title
-  final String title;
-  final String date;
-  final String hour;
+  final ServiceModel? serviceModel;
+  final BookingModel? bookingModel;
+
+  final bool upcoming;
 
   const BookingList({
-    Key? key,
-    required this.title,
-    required this.date,
-    required this.hour,
-  }) : super(key: key);
+    super.key,
+    required this.serviceModel,
+    required this.bookingModel,
+    required this.upcoming,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -51,14 +54,13 @@ class BookingList extends StatelessWidget {
                     width: 43.w,
                     height: 48.h,
                   ),
-                  SizedBox(width: 8.w), // Jarak antar item
-
+                  SizedBox(width: 8.w),
                   Flexible(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          title,
+                          serviceModel?.name ?? "Terjadi Kesalahan",
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: GoogleFonts.mulish(
@@ -68,7 +70,7 @@ class BookingList extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          date,
+                          formatToHariTanggal(bookingModel!.date),
                           style: GoogleFonts.mulish(
                             fontSize: 12.sp,
                             fontWeight: FontWeight.w400,
@@ -76,7 +78,7 @@ class BookingList extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          hour,
+                          "Pukul ${bookingModel!.startTime}",
                           style: GoogleFonts.mulish(
                             fontSize: 12.sp,
                             fontWeight: FontWeight.w400,
@@ -86,9 +88,7 @@ class BookingList extends StatelessWidget {
                       ],
                     ),
                   ),
-
                   SizedBox(width: 8.w), // Jarak antar item
-
                   Container(
                     padding: EdgeInsets.all(10.h),
                     decoration: BoxDecoration(
@@ -108,9 +108,20 @@ class BookingList extends StatelessWidget {
               ),
             ),
             GestureDetector(
-              onTap: () {
-                Nav.to(context, DetailBookingPage());
-              },
+              behavior: HitTestBehavior.opaque,
+              onTap:
+                  serviceModel == null
+                      ? null
+                      : () {
+                        Nav.to(
+                          context,
+                          DetailBookingPage(
+                            serviceModel: serviceModel!,
+                            bookingModel: bookingModel!,
+                            upcoming: upcoming,
+                          ),
+                        );
+                      },
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -119,22 +130,27 @@ class BookingList extends StatelessWidget {
                     bottomRight: Radius.circular(10.r),
                   ),
                 ),
-                padding: EdgeInsets.symmetric(
-                  vertical: 10.h,
-                ),
+                padding: EdgeInsets.symmetric(vertical: 10.h),
                 child: Center(
-                  child: Text("Lihat Detail", style:
-                  GoogleFonts.mulish(
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w400,
-                    color: ColorValue.blueLinkColor,
-                  ),),
+                  child: Text(
+                    "Lihat Detail",
+                    style: GoogleFonts.mulish(
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w400,
+                      color: ColorValue.blueLinkColor,
+                    ),
+                  ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
     );
   }
+}
+
+String formatToHariTanggal(String date) {
+  final parsed = DateTime.parse(date);
+  return DateFormat('EEEE, d MMMM yyyy', 'id_ID').format(parsed);
 }

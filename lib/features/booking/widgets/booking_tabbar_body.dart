@@ -42,7 +42,6 @@ class BookingTabBarBody extends StatelessWidget {
               itemBuilder: (context, index) {
                 final booking =
                     upcoming ? state.upcoming[index] : state.past[index];
-                // print(booking.id);
                 final service =
                     serviceState.services
                         .where((s) => s.id == booking.serviceId)
@@ -50,15 +49,15 @@ class BookingTabBarBody extends StatelessWidget {
                         .firstOrNull;
                 if (service == null) {
                   return BookingList(
-                    title: "[Service tidak ditemukan]",
-                    date: formatToHariTanggal(booking.date),
-                    hour: 'Pukul ${booking.startTime}',
+                    serviceModel: service,
+                    bookingModel: booking,
+                    upcoming: upcoming,
                   );
                 }
                 return BookingList(
-                  title: service.name,
-                  date: formatToHariTanggal(booking.date),
-                  hour: 'Pukul ${booking.startTime}',
+                  upcoming: upcoming,
+                  serviceModel: service,
+                  bookingModel: booking,
                 );
               },
             );
@@ -69,10 +68,5 @@ class BookingTabBarBody extends StatelessWidget {
         },
       ),
     );
-  }
-
-  String formatToHariTanggal(String date) {
-    final parsed = DateTime.parse(date);
-    return DateFormat('EEEE, d MMMM yyyy', 'id_ID').format(parsed);
   }
 }

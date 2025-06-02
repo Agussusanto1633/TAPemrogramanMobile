@@ -3,9 +3,19 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
+import 'package:servista/features/booking/model/booking_model.dart';
+import 'package:servista/features/service/model/service_model.dart';
 
 class DetailBookingServiceDetailsSection extends StatefulWidget {
-  const DetailBookingServiceDetailsSection({Key? key}) : super(key: key);
+  const DetailBookingServiceDetailsSection({
+    super.key,
+    required this.serviceModel,
+    required this.bookingModel,
+  });
+
+  final ServiceModel serviceModel;
+  final BookingModel bookingModel;
 
   @override
   State<DetailBookingServiceDetailsSection> createState() =>
@@ -45,12 +55,12 @@ class _DetailBookingServiceDetailsSectionState
                       width: 30.w,
                       decoration: BoxDecoration(shape: BoxShape.circle),
                       child: Image.network(
-                        "https://res.cloudinary.com/dxk0ttpjw/image/upload/v1747269314/image_66_iktwet.png",
+                        widget.serviceModel.image,
                         fit: BoxFit.cover,
                       ),
                     ),
                     Text(
-                      "Layanan Potong Rumput",
+                      widget.serviceModel.name,
                       style: GoogleFonts.roboto(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w500,
@@ -64,8 +74,7 @@ class _DetailBookingServiceDetailsSectionState
                   ],
                 ),
                 SizedBox(height: 15.h),
-                Divider(color: Color(0xffE5E5E5), thickness: 1
-                ),
+                Divider(color: Color(0xffE5E5E5), thickness: 1),
                 Gap(12.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -84,7 +93,10 @@ class _DetailBookingServiceDetailsSectionState
                           ),
                           Gap(5.h),
                           Text(
-                            "Sabtu, 3 Januari",
+                            DateFormat(
+                              'EEEE, d MMMM yyyy',
+                              'id_ID',
+                            ).format(DateTime.parse(widget.bookingModel.date)),
                             style: GoogleFonts.roboto(
                               fontSize: 13.sp,
                               fontWeight: FontWeight.w500,
@@ -113,7 +125,7 @@ class _DetailBookingServiceDetailsSectionState
                           ),
                           Gap(5.h),
                           Text(
-                            "08.00 - 09.00",
+                            "${widget.bookingModel.startTime} - ${widget.bookingModel.endTime}",
                             style: GoogleFonts.roboto(
                               fontSize: 13.sp,
                               fontWeight: FontWeight.w500,
@@ -125,8 +137,7 @@ class _DetailBookingServiceDetailsSectionState
                   ],
                 ),
                 Gap(14.h),
-                Divider(color: Color(0xffE5E5E5), thickness: 1
-                ),
+                Divider(color: Color(0xffE5E5E5), thickness: 1),
                 Gap(12.h),
                 Text(
                   "Pekerjaan Tambahan",
@@ -145,8 +156,7 @@ class _DetailBookingServiceDetailsSectionState
                   ),
                 ),
                 Gap(15.h),
-                Divider(color: Color(0xffE5E5E5), thickness: 1
-                ),
+                Divider(color: Color(0xffE5E5E5), thickness: 1),
                 Gap(12.h),
                 Text(
                   "Pekerja",
@@ -160,7 +170,7 @@ class _DetailBookingServiceDetailsSectionState
                 Row(
                   children: [
                     Text(
-                      "Pekerja 2",
+                      widget.bookingModel.workerId,
                       style: GoogleFonts.roboto(
                         fontSize: 13.sp,
                         fontWeight: FontWeight.w500,
@@ -175,8 +185,7 @@ class _DetailBookingServiceDetailsSectionState
                   ],
                 ),
                 Gap(15.h),
-                Divider(color: Color(0xffE5E5E5), thickness: 1
-                ),
+                Divider(color: Color(0xffE5E5E5), thickness: 1),
                 Gap(13.h),
                 Text(
                   "Luas Tanah",
@@ -195,8 +204,7 @@ class _DetailBookingServiceDetailsSectionState
                   ),
                 ),
                 Gap(13.h),
-                Divider(color: Color(0xffE5E5E5), thickness: 1
-                ),
+                Divider(color: Color(0xffE5E5E5), thickness: 1),
                 Gap(12.h),
                 Text(
                   "Alamat",
@@ -208,7 +216,7 @@ class _DetailBookingServiceDetailsSectionState
                 ),
                 Gap(5.h),
                 Text(
-                  "Jl. Merdeka Barat No.45, RT.4/RW.5, Blimbing, Kec. Blimbing, Kota Malang, Daerah Khusus Kota Malang 65122",
+                  widget.serviceModel.address,
                   style: GoogleFonts.roboto(
                     fontSize: 13.sp,
                     fontWeight: FontWeight.w500,
