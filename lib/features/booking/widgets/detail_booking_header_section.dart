@@ -5,12 +5,14 @@ import 'package:flutter_svg/svg.dart';
 import '../../../core/theme/color_value.dart';
 
 class DetailBookingHeaderSection extends StatelessWidget {
-  const DetailBookingHeaderSection({Key? key}) : super(key: key);
+  const DetailBookingHeaderSection({super.key, required this.bookingId});
+
+  final String bookingId;
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    return               Stack(
+    return Stack(
       children: [
         Container(
           color: const Color(0xff0F1828),
@@ -81,12 +83,15 @@ class DetailBookingHeaderSection extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 1.h),
-                    Text(
-                      "126789",
-                      style: textTheme.displayLarge!.copyWith(
-                        color: Colors.white,
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w600,
+                    SizedBox(
+                      width: MediaQuery.sizeOf(context).width / 1.5,
+                      child: Text(
+                        bookingId,
+                        style: textTheme.displayLarge!.copyWith(
+                          color: Colors.white,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ],

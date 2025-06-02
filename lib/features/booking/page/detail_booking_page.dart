@@ -2,20 +2,46 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:intl/intl.dart';
 import 'package:servista/core/theme/color_value.dart';
 import 'package:servista/features/booking/widgets/detail_booking_card.dart';
 import 'package:servista/features/booking/widgets/detail_booking_header_section.dart';
 import 'package:servista/features/booking/widgets/detail_booking_overview_section.dart';
 import 'package:servista/features/booking/widgets/detail_booking_service_details_section.dart';
 
+import '../../service/model/service_model.dart';
+import '../model/booking_model.dart';
+
 class DetailBookingPage extends StatefulWidget {
-  const DetailBookingPage({Key? key}) : super(key: key);
+  const DetailBookingPage({
+    super.key,
+    required this.serviceModel,
+    required this.bookingModel,
+    required this.upcoming,
+  });
+  final ServiceModel serviceModel;
+  final BookingModel bookingModel;
+
+  final bool upcoming;
 
   @override
   State<DetailBookingPage> createState() => _DetailBookingPageState();
 }
 
 class _DetailBookingPageState extends State<DetailBookingPage> {
+  late final String status;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    status = determineBookingStatus(
+      widget.bookingModel.date,
+      widget.bookingModel.startTime,
+      widget.bookingModel.endTime,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
@@ -24,14 +50,22 @@ class _DetailBookingPageState extends State<DetailBookingPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              DetailBookingHeaderSection(),
+              DetailBookingHeaderSection(bookingId: widget.bookingModel.id),
               Container(
-                padding: EdgeInsets.only(top: 23.h, left: 20.w, right: 23.w),
+                width: double.infinity,
+                padding: EdgeInsets.only(
+                  top: 23.h,
+                  left: 20.w,
+                  right: 23.w,
+                  bottom: 23.h,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Pekerja Telah menyelesaikan pesanan - Sabtu, 3 Januari 2025",
+                      widget.upcoming
+                          ? "Kamu Memesan Layanan Ini Untuk : \n${formatToHariTanggal(widget.bookingModel.date)} "
+                          : "Pekerja Telah menyelesaikan pesanan - ${formatToHariTanggal(widget.bookingModel.date)}",
                       style: textTheme.displayLarge!.copyWith(
                         color: ColorValue.darkColor,
                         fontSize: 14.sp,
@@ -40,56 +74,57 @@ class _DetailBookingPageState extends State<DetailBookingPage> {
                     ),
                     SizedBox(height: 13.h),
                     Text(
-                      "Pekerjaan Potong Rumput",
+                      widget.serviceModel.name,
                       style: textTheme.displayLarge!.copyWith(
                         color: Color(0xff777777),
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    SizedBox(height: 18.h),
-                    Row(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 11.r,
-                            horizontal: 17.r,
-                          ),
-                          decoration: BoxDecoration(
-                            color: ColorValue.primaryColor,
-                            borderRadius: BorderRadius.circular(50.r),
-                          ),
-                          child: Text(
-                            "Penilaian Servis",
-                            style: textTheme.displayLarge!.copyWith(
-                              color: ColorValue.darkColor,
-                              fontSize: 13.sp,
-                              fontWeight: FontWeight.w600,
+                    SizedBox(height: widget.upcoming ? 0 : 18.h),
+                    widget.upcoming
+                        ? SizedBox()
+                        : Row(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 11.r,
+                                horizontal: 17.r,
+                              ),
+                              decoration: BoxDecoration(
+                                color: ColorValue.primaryColor,
+                                borderRadius: BorderRadius.circular(50.r),
+                              ),
+                              child: Text(
+                                "Penilaian Servis",
+                                style: textTheme.displayLarge!.copyWith(
+                                  color: ColorValue.darkColor,
+                                  fontSize: 13.sp,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        SizedBox(width: 50.w),
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 11.r,
-                            horizontal: 17.r,
-                          ),
-                          decoration: BoxDecoration(
-                            color: ColorValue.primaryColor,
-                            borderRadius: BorderRadius.circular(50.r),
-                          ),
-                          child: Text(
-                            "Pesan Ulang",
-                            style: textTheme.displayLarge!.copyWith(
-                              color: ColorValue.darkColor,
-                              fontSize: 13.sp,
-                              fontWeight: FontWeight.w600,
+                            SizedBox(width: 50.w),
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 11.r,
+                                horizontal: 17.r,
+                              ),
+                              decoration: BoxDecoration(
+                                color: ColorValue.primaryColor,
+                                borderRadius: BorderRadius.circular(50.r),
+                              ),
+                              child: Text(
+                                "Pesan Ulang",
+                                style: textTheme.displayLarge!.copyWith(
+                                  color: ColorValue.darkColor,
+                                  fontSize: 13.sp,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
                             ),
-                          ),
+                          ],
                         ),
-                      ],
-                    ),
-                    SizedBox(height: 24.h),
                   ],
                 ),
               ),
@@ -106,7 +141,9 @@ class _DetailBookingPageState extends State<DetailBookingPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Pesananmu Sudah Dikerjakan!",
+                      widget.upcoming
+                          ? "Pesananmu Sudah Terjadwal!"
+                          : "Pesananmu Sudah Dikerjakan!",
                       style: textTheme.displayLarge!.copyWith(
                         color: Colors.black,
                         fontSize: 14.sp,
@@ -114,76 +151,64 @@ class _DetailBookingPageState extends State<DetailBookingPage> {
                       ),
                     ),
                     SizedBox(height: 20.h),
+
+                    _buildProgressIndicator(status),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Stack(
-                          clipBehavior: Clip.none,
-                          children: [
-                            _buildCircleProgress(),
-                            Positioned(
-                              left: -5.w,
-                              bottom: -15.h,
-                              child: Text("Booked"),
-                            ),
-                          ],
+                        Text(
+                          "  Booked",
+                          style: textTheme.bodyMedium!.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                        Stack(
-                          clipBehavior: Clip.none,
-                          children: [
-                            _buildCircleProgress(),
-                            Positioned(
-                              left: -16.w,
-                              bottom: -15.h,
-                              child: Text("On the way"),
-                            ),
-                          ],
+                        Text(
+                          "On the way",
+                          style: textTheme.bodyMedium!.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                        Stack(
-                          clipBehavior: Clip.none,
-                          children: [
-                            _buildCircleProgress(),
-                            Positioned(
-                              left: -4.w,
-                              bottom: -15.h,
-                              child: Text("Started"),
-                            ),
-                          ],
+                        Text(
+                          "Started",
+                          style: textTheme.bodyMedium!.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                        Stack(
-                          clipBehavior: Clip.none,
-                          children: [
-                            _buildCircleProgress(isLast: true),
-                            Positioned(
-                              left: -15.w,
-                              bottom: -15.h,
-                              child: Text("Completed"),
-                            ),
-                          ],
+                        Text(
+                          "Completed",
+                          style: textTheme.bodyMedium!.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 38.h),
+                    SizedBox(height: 23.h),
                     Text(
-                      "Kamu memesan jasa ini pada Jum’at 2 Januari 2025\nuntuk Sabtu 3 Januari 2025",
+                      "Kamu memesan jasa ini pada ${DateFormat("EEEE, d MMMM yyyy", "id_ID").format(DateTime.parse(widget.bookingModel.createdAt).toLocal())}\nuntuk ${formatToHariTanggal(widget.bookingModel.date)}",
                       style: textTheme.displayLarge!.copyWith(
                         color: Colors.black,
                         fontSize: 11.sp,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    // _buildCircleProgress("Booked")
                   ],
                 ),
               ),
-              DetailBookingCard(),
+              DetailBookingCard(
+                serviceModel: widget.serviceModel,
+                worker: widget.bookingModel.workerId,
+              ),
               Container(
                 width: double.infinity,
                 height: 6.h,
                 color: const Color(0xffF3F3F3),
               ),
-              DetailBookingServiceDetailsSection(),
+              DetailBookingServiceDetailsSection(
+                serviceModel: widget.serviceModel,
+                bookingModel: widget.bookingModel,
+              ),
               Gap(22.h),
-              DetailBookingOverviewSection(),
+              DetailBookingOverviewSection(price: widget.serviceModel.price),
               Gap(58.h),
             ],
           ),
@@ -192,14 +217,34 @@ class _DetailBookingPageState extends State<DetailBookingPage> {
     );
   }
 
-  _buildCircleProgress({bool isLast = false}) {
+  Widget _buildProgressIndicator(String currentStatus) {
+    final statusOrder = ["booked", "onworking", "started", "completed"];
+    final currentIndex = statusOrder.indexOf(currentStatus);
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(statusOrder.length, (index) {
+        bool isActive = index <= currentIndex;
+        bool isLast = index == statusOrder.length - 1;
+        return Column(
+          children: [
+            isLast
+                ? buildCircleProgress(isLast: true, isActive: isActive)
+                : buildCircleProgress(isActive: isActive),
+          ],
+        );
+      }),
+    );
+  }
+
+  Widget buildCircleProgress({bool isLast = false, required bool isActive}) {
     return Row(
       children: [
         Container(
           height: 30.h,
           width: 30.w,
           decoration: BoxDecoration(
-            color: Color(0xff313131),
+            color: isActive ? const Color(0xff313131) : Colors.white,
             shape: BoxShape.circle,
             border: Border.all(color: Color(0xffffffff), width: 2.w),
           ),
@@ -215,14 +260,37 @@ class _DetailBookingPageState extends State<DetailBookingPage> {
         isLast
             ? SizedBox()
             : Container(
-              width: 62.w,
+              width: 57.w,
               height: 5.h,
               decoration: BoxDecoration(
-                color: Color(0xffffffff),
+                color: isActive ? const Color(0xff313131) : Colors.white,
                 borderRadius: BorderRadius.circular(50.r),
               ),
             ),
       ],
     );
+  }
+}
+
+String formatToHariTanggal(String date) {
+  final parsed = DateTime.parse(date);
+  return DateFormat('EEEE, d MMMM yyyy', 'id_ID').format(parsed);
+}
+
+String determineBookingStatus(String date, String startTime, String endTime) {
+  final now = DateTime.now();
+
+  // Format: date = "2025-06-10", time = "09:00"
+  DateTime startDateTime = DateTime.parse(
+    '$date ${startTime.padLeft(5, '0')}:00',
+  );
+  DateTime endDateTime = DateTime.parse('$date ${endTime.padLeft(5, '0')}:00');
+
+  if (now.isBefore(startDateTime)) {
+    return "booked";
+  } else if (now.isAfter(endDateTime)) {
+    return "completed";
+  } else {
+    return "onworking";
   }
 }
