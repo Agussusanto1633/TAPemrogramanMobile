@@ -179,20 +179,20 @@ Future<DateTime?> showCalendarBottomSheet(BuildContext context) {
                 // Tombol Pilih
                 Align(
                   alignment: Alignment.bottomRight,
-                  child: SizedBox(
-                    width: 120.w,
-                    height: 34.w,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: ColorValue.primaryColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6.r),
-                        ),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context, selectedDate);
+                      cubit.setSelectedDate(selectedDate);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16.w,
+                        vertical: 8.h,
                       ),
-                      onPressed: () {
-                        Navigator.pop(context, selectedDate);
-                        cubit.setSelectedDate(selectedDate);
-                      },
+                      decoration: BoxDecoration(
+                        color: ColorValue.primaryColor,
+                          borderRadius: BorderRadius.circular(6.r),
+                      ),
                       child: Text(
                         "Pilih Tanggal",
                         style: GoogleFonts.inter(
