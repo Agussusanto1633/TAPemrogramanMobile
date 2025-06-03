@@ -11,6 +11,7 @@ import 'package:servista/core/theme/color_value.dart';
 import 'package:servista/core/utils/utils.dart';
 import 'package:servista/features/service/widgets/bottom_sheets_widgets/bottom_sheets/calendar_bottom_sheet.dart';
 import 'package:servista/features/service/widgets/bottom_sheets_widgets/bottom_sheets/payment_method_bottom_sheet.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../payment/page/payment_page.dart';
 import '../cubit/service_cubit.dart';
@@ -25,6 +26,26 @@ class ServiceBookingPage extends StatefulWidget {
 
 class _ServiceBookingPageState extends State<ServiceBookingPage> {
   DateTime selectedDate = DateTime.now();
+  late String displayName;
+  late String email;
+  late String photoUrl;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    loadUserData();
+  }
+
+
+  Future<void> loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      displayName = prefs.getString('user_displayName') ?? 'Guest';
+      email = prefs.getString('user_email') ?? 'Unknown';
+      photoUrl = prefs.getString('user_photoURL') ?? '';
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -231,7 +252,7 @@ class _ServiceBookingPageState extends State<ServiceBookingPage> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            "Firman",
+                                            displayName,
                                             style: textTheme.bodyLarge!
                                                 .copyWith(
                                                   color: Color(0xff3F414E),
