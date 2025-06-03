@@ -52,13 +52,11 @@ class _ChatPageState extends State<ChatPage> {
     return Scaffold(
       backgroundColor: Color(0xffF5F5F5),
       appBar: AppBar(
-        //atur padding kanan-kiri appbar
         toolbarTextStyle: textTheme.bodyMedium!.copyWith(
           fontSize: 18.sp,
           fontWeight: AppFontWeight.semiBold,
         ),
         toolbarHeight: 42.h,
-        // Atur tinggi AppBar sesuai kebutuhan
         centerTitle: false,
         elevation: 0,
         scrolledUnderElevation: 0,
@@ -66,6 +64,7 @@ class _ChatPageState extends State<ChatPage> {
         leading: IconButton(
           icon: SvgPicture.asset("assets/icons/back_half_arrow.svg"),
           onPressed: () {
+            Navigator.pop(context); //
           },
         ),
         title: Text(
