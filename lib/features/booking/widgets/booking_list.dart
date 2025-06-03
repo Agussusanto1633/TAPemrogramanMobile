@@ -9,6 +9,8 @@ import 'package:servista/features/booking/model/booking_model.dart';
 import 'package:servista/features/booking/page/detail_booking_page.dart';
 import 'package:servista/features/service/model/service_model.dart';
 
+import '../../chat/page/chat_page.dart';
+
 class BookingList extends StatelessWidget {
   final ServiceModel? serviceModel;
   final BookingModel? bookingModel;
@@ -89,18 +91,23 @@ class BookingList extends StatelessWidget {
                     ),
                   ),
                   SizedBox(width: 8.w), // Jarak antar item
-                  Container(
-                    padding: EdgeInsets.all(10.h),
-                    decoration: BoxDecoration(
-                      color: ColorValue.darkColor,
-                      borderRadius: BorderRadius.circular(5.r),
-                    ),
-                    child: Text(
-                      "Chat Worker",
-                      style: GoogleFonts.mulish(
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white,
+                  GestureDetector(
+                    onTap: () => Nav.to(context, ChatPage(
+                      chatUser: bookingModel!.workerId.toString()
+                    )),
+                    child: Container(
+                      padding: EdgeInsets.all(10.h),
+                      decoration: BoxDecoration(
+                        color: ColorValue.darkColor,
+                        borderRadius: BorderRadius.circular(5.r),
+                      ),
+                      child: Text(
+                        "Chat Worker",
+                        style: GoogleFonts.mulish(
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),

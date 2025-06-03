@@ -26,9 +26,11 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<String> locations = ['Malang', 'Surabaya', 'Jakarta', 'Bandung'];
   String selectedLocation = 'Malang';
-  String displayName = '';
+  late String displayName;
   String email = '';
   String photoUrl = '';
+  //trim displayName to first word
+  String get trimmedDisplayName => displayName.split(' ').first;
 
   @override
   void initState() {
@@ -95,7 +97,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                           SizedBox(width: 10.w),
                           Text(
-                            "Halo $displayName",
+                            "Halo, $trimmedDisplayName",
                             style: textTheme.titleMedium?.copyWith(
                               color: Colors.white,
                               fontWeight: FontWeight.w400,
