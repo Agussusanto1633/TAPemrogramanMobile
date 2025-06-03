@@ -22,11 +22,7 @@ class DetailServicePage extends StatefulWidget {
 
 class _DetailServicePageState extends State<DetailServicePage>
     with SingleTickerProviderStateMixin {
-  final List<String> galleryImages = [
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9WYzQWEjZck6kOZi8VIec_mK2Der3rh-6Mw&s',
-    'https://cms.gokomodo.com/wp-content/uploads/2023/10/Blog-banner-corpcomm-_-Pemotong-rumput--1024x769.jpg',
-    'https://www.teknikmart.com/media/wysiwyg/icon-image/jenis-mesin-potong-rumput-dan-cara-merawatnya.jpg',
-  ];
+
   late TabController _tabController;
 
   @override
