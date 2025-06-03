@@ -8,6 +8,7 @@ import 'package:servista/features/booking/widgets/detail_booking_card.dart';
 import 'package:servista/features/booking/widgets/detail_booking_header_section.dart';
 import 'package:servista/features/booking/widgets/detail_booking_overview_section.dart';
 import 'package:servista/features/booking/widgets/detail_booking_service_details_section.dart';
+import 'package:servista/features/service/pages/detail_service_page.dart';
 
 import '../../service/model/service_model.dart';
 import '../model/booking_model.dart';
@@ -105,21 +106,34 @@ class _DetailBookingPageState extends State<DetailBookingPage> {
                               ),
                             ),
                             SizedBox(width: 50.w),
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 11.r,
-                                horizontal: 17.r,
-                              ),
-                              decoration: BoxDecoration(
-                                color: ColorValue.primaryColor,
-                                borderRadius: BorderRadius.circular(50.r),
-                              ),
-                              child: Text(
-                                "Pesan Ulang",
-                                style: textTheme.displayLarge!.copyWith(
-                                  color: ColorValue.darkColor,
-                                  fontSize: 13.sp,
-                                  fontWeight: FontWeight.w600,
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder:
+                                        (context) => DetailServicePage(
+                                          service: widget.serviceModel,
+                                        ),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 11.r,
+                                  horizontal: 17.r,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: ColorValue.primaryColor,
+                                  borderRadius: BorderRadius.circular(50.r),
+                                ),
+                                child: Text(
+                                  "Pesan Ulang",
+                                  style: textTheme.displayLarge!.copyWith(
+                                    color: ColorValue.darkColor,
+                                    fontSize: 13.sp,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                               ),
                             ),

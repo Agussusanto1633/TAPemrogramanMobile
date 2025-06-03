@@ -25,22 +25,18 @@ import '../../../cubit/service_cubit.dart'; // Sesuaikan path
 //   static const Color dark2Color = Colors.black54;
 //   static const Color darkColor = Colors.black;
 // }
-
 Future<String?> showTimeBottomSheet(
   BuildContext context,
   DateTime selectedDate,
   ServiceModel serviceModel,
 ) {
-  final List<String> times =
-      serviceModel
-          .availableTimeSlots; // Ini masih dibutuhkan oleh _TimeSelectionInteractiveArea
+  final List<String> times = serviceModel.availableTimeSlots;
   final String serviceId = serviceModel.id;
 
   final dateFormatted = DateFormat(
     "EEEE, d MMMM yyyy",
     'id_ID',
   ).format(selectedDate);
-
   final ServiceRepository serviceRepository = ServiceRepository();
 
   final Future<Map<String, String>> statusesFuture = serviceRepository
@@ -60,7 +56,6 @@ Future<String?> showTimeBottomSheet(
     builder: (modalContext) {
       final cubit = context.read<ServiceCubit>();
 
-      // modalContext digunakan untuk Navigator.pop
       return FutureBuilder<Map<String, String>>(
         future: statusesFuture,
         builder: (fbContext, snapshot) {
@@ -95,17 +90,9 @@ Future<String?> showTimeBottomSheet(
                       ),
                     ),
                     SizedBox(height: 16.h),
-                    // Pertimbangkan menambahkan tombol retry yang memanggil ulang pemanggilan showTimeBottomSheet
-                    // atau menggunakan mekanisme state management yang lebih canggih untuk retry.
                     ElevatedButton(
                       onPressed: () {
-                        // Cara sederhana untuk retry: tutup dan buka lagi,
-                        // atau jika ada provider, trigger refresh.
-                        // Untuk saat ini, tombol ini hanya contoh.
-                        Navigator.pop(modalContext); // Tutup dulu
-                        // Mungkin panggil showTimeBottomSheet lagi dari parent
-                        // dengan memanggil ulang method yang menampilkannya.
-                        // Ini di luar scope modifikasi langsung di sini.
+                        Navigator.pop(modalContext);
                       },
                       child: const Text("Tutup & Coba Lagi Manual"),
                     ),
@@ -115,11 +102,11 @@ Future<String?> showTimeBottomSheet(
             );
           } else if (snapshot.hasData) {
             final Map<String, String> slotStatusesData = snapshot.data!;
-
             mainContent = _TimeSelectionInteractiveArea(
-              times: times, // Dari ServiceModel
-              slotStatusesData: slotStatusesData, // Dari FutureBuilder
+              times: times,
+              slotStatusesData: slotStatusesData,
               dateFormatted: dateFormatted,
+              selectedDate: selectedDate, // <== Tambahan
               onTimeConfirmed: (String? selectedTimeFromChild) {
                 Navigator.pop(modalContext, selectedTimeFromChild);
               },
@@ -151,18 +138,17 @@ class _TimeSelectionInteractiveArea extends StatefulWidget {
   final List<String> times;
   final Map<String, String> slotStatusesData;
   final String dateFormatted;
-  // final Function(String) onTimeSelected; // Jika hanya ingin callback saat tap
-  final Function(String?)
-  onTimeConfirmed; // Callback saat tombol "Pilih Waktu" ditekan
+  final DateTime selectedDate; // <== Tambahan
+  final Function(String?) onTimeConfirmed;
 
   const _TimeSelectionInteractiveArea({
-    Key? key,
+    super.key,
     required this.times,
     required this.slotStatusesData,
     required this.dateFormatted,
-    // required this.onTimeSelected,
+    required this.selectedDate,
     required this.onTimeConfirmed,
-  }) : super(key: key);
+  });
 
   @override
   __TimeSelectionInteractiveAreaState createState() =>
@@ -174,6 +160,28 @@ class __TimeSelectionInteractiveAreaState
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<ServiceCubit>();
+    final now = DateTime.now();
+
+    final List<String> filteredTimes =
+        widget.times.where((timeString) {
+          final parts = timeString.split(':');
+          final hour = int.parse(parts[0]);
+          final minute = int.parse(parts[1]);
+
+          final timeAsDateTime = DateTime(
+            now.year,
+            now.month,
+            now.day,
+            hour,
+            minute,
+          );
+
+          if (DateUtils.isSameDay(widget.selectedDate, now)) {
+            return timeAsDateTime.isAfter(now);
+          }
+
+          return true;
+        }).toList();
 
     return BlocBuilder<ServiceCubit, ServiceState>(
       builder: (context, state) {
@@ -200,7 +208,6 @@ class __TimeSelectionInteractiveAreaState
               ),
             ),
             SizedBox(height: 10.w),
-
             Row(
               children: [
                 _buildLegendBox(
@@ -221,12 +228,12 @@ class __TimeSelectionInteractiveAreaState
             SizedBox(height: 22.w),
 
             // Grid Waktu
-            if (widget.times.isEmpty)
+            if (filteredTimes.isEmpty)
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 20.h),
                 child: Center(
                   child: Text(
-                    "Tidak ada slot waktu yang dijadwalkan.",
+                    "Tidak ada slot waktu yang tersedia.",
                     style: GoogleFonts.inter(fontSize: 13.sp),
                   ),
                 ),
@@ -236,13 +243,11 @@ class __TimeSelectionInteractiveAreaState
                 spacing: 16.w,
                 runSpacing: 16.w,
                 children:
-                    widget.times.map((time) {
-                      // Akses slotStatusesData dari widget props
+                    filteredTimes.map((time) {
                       final String slotStatus =
                           widget.slotStatusesData[time] ?? "Available";
                       final bool isBooked = slotStatus == "Booked";
                       final bool isError = slotStatus == "Error";
-                      // Gunakan _locallySelectedTime dari state
                       final bool isSelected = selectedTime == time;
 
                       Color bgColor;
@@ -253,10 +258,6 @@ class __TimeSelectionInteractiveAreaState
                         bgColor = Colors.orange.shade50;
                         textColor = Colors.orange.shade700;
                         displayText = "N/A";
-                        // border = Border.all(
-                        //   color: Colors.orange.shade300,
-                        //   width: 1,
-                        // );
                       } else if (isSelected) {
                         bgColor = ColorValue.primaryColor;
                         textColor = Colors.black;
@@ -264,7 +265,6 @@ class __TimeSelectionInteractiveAreaState
                         bgColor = ColorValue.dark2Color;
                         textColor = Colors.white;
                       } else {
-                        // Available
                         bgColor = ColorValue.grayColor;
                         textColor = Colors.black;
                       }
@@ -285,7 +285,7 @@ class __TimeSelectionInteractiveAreaState
                             borderRadius: BorderRadius.circular(5.r),
                           ),
                           child: Text(
-                            time,
+                            displayText,
                             style: GoogleFonts.inter(
                               fontWeight: FontWeight.w500,
                               color: textColor,
@@ -295,6 +295,7 @@ class __TimeSelectionInteractiveAreaState
                       );
                     }).toList(),
               ),
+
             SizedBox(height: 22.w),
 
             Align(
@@ -302,7 +303,6 @@ class __TimeSelectionInteractiveAreaState
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size(110.w, 34.w),
-
                   backgroundColor:
                       selectedTime == null
                           ? ColorValue.grayColor
@@ -313,9 +313,7 @@ class __TimeSelectionInteractiveAreaState
                     selectedTime == null
                         ? null
                         : () {
-                          widget.onTimeConfirmed(
-                            selectedTime,
-                          ); // Panggil callback pop
+                          widget.onTimeConfirmed(selectedTime);
                           cubit.setSelectedTime(state.selectedTime!);
                         },
                 child: Text(
@@ -336,8 +334,6 @@ class __TimeSelectionInteractiveAreaState
       },
     );
   }
-
-  // Pindahkan _buildLegendBox ke sini atau biarkan global jika dipakai di tempat lain
 
   Widget _buildLegendBox(String label, Color bg, Color textColor) {
     return Container(

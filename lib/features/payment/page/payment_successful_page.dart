@@ -31,8 +31,16 @@ class _PaymentSuccessfulPageState extends State<PaymentSuccessfulPage> {
         return WillPopScope(
           onWillPop: () async {
             context.read<ServiceCubit>().reset();
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => NavBar()),
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder:
+                    (context) => BlocProvider.value(
+                      value: context.read<ServiceCubit>(),
+                      child: NavBar(),
+                    ),
+              ),
+              (route) => false,
             );
             return false;
           },
@@ -53,12 +61,13 @@ class _PaymentSuccessfulPageState extends State<PaymentSuccessfulPage> {
                             Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => BlocProvider.value(
-                                  value: context.read<ServiceCubit>(),
-                                  child: NavBar(),
-                                ),
+                                builder:
+                                    (context) => BlocProvider.value(
+                                      value: context.read<ServiceCubit>(),
+                                      child: NavBar(),
+                                    ),
                               ),
-                                  (route) => false,
+                              (route) => false,
                             );
                           },
                           child: SvgPicture.asset(
@@ -278,7 +287,9 @@ class _PaymentSuccessfulPageState extends State<PaymentSuccessfulPage> {
                                                 ),
                                           ),
                                           Text(
-                                            Utils.formatRupiah(state.price ?? 0),
+                                            Utils.formatRupiah(
+                                              state.price ?? 0,
+                                            ),
                                             style: textTheme.titleLarge!
                                                 .copyWith(
                                                   color: ColorValue.darkColor,
