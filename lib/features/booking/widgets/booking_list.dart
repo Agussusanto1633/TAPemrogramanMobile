@@ -37,7 +37,7 @@ class BookingList extends StatelessWidget {
         child: Column(
           children: [
             Text(
-              "Servista",
+              "KoneksiJasa",
               style: GoogleFonts.mulish(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.bold,

@@ -11,7 +11,7 @@ import '../../../../core/scroll/scroll_behavior.dart';
 import '../widgets/financial_info_card.dart';
 
 class AdminHomePage extends StatefulWidget {
-  const AdminHomePage({Key? key}) : super(key: key);
+  const AdminHomePage({super.key});
 
   @override
   State<AdminHomePage> createState() => _AdminHomePageState();

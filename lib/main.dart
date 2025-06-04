@@ -69,7 +69,7 @@ class MyApp extends StatelessWidget {
         minTextAdapt: true,
         builder: (_, child) {
           return MaterialApp(
-            title: 'Servista',
+            title: 'koneksijasa',
             debugShowCheckedModeBanner: false,
             theme: AppThemeData.getThemeLight(),
             home: child,

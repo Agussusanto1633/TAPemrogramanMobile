@@ -10,7 +10,7 @@ import '../../../../core/theme/color_value.dart';
 import '../../home/widgets/financial_info_card.dart';
 
 class AdminIncomePage extends StatefulWidget {
-  const AdminIncomePage({Key? key}) : super(key: key);
+  const AdminIncomePage({super.key});
 
   @override
   State<AdminIncomePage> createState() => _AdminIncomePageState();

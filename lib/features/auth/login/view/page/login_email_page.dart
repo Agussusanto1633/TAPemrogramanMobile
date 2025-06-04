@@ -13,7 +13,7 @@ import 'package:servista/features/auth/register/view/register_email_page.dart';
 import '../../../../../core/nav_bar/nav_bar.dart';
 
 class LoginEmailPage extends StatefulWidget {
-  const LoginEmailPage({Key? key}) : super(key: key);
+  const LoginEmailPage({super.key});
 
   @override
   State<LoginEmailPage> createState() => _LoginEmailPageState();

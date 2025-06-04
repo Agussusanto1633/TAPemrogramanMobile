@@ -85,7 +85,7 @@ class _PaymentEticketPageState extends State<PaymentEticketPage> {
                                 children: [
                                   Gap(7.h),
                                   Text(
-                                    "Servista",
+                                    "KoneksiJasa",
                                     style: textTheme.bodySmall!.copyWith(
                                       fontSize: 16.sp,
                                       fontWeight: FontWeight.bold,

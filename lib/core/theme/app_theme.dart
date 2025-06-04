@@ -64,9 +64,9 @@ class AppThemeData {
 
 
       tabBarTheme: TabBarTheme(
-        overlayColor: MaterialStateProperty.resolveWith<Color?>(
-              (Set<MaterialState> states) {
-            if (states.contains(MaterialState.pressed)) {
+        overlayColor: WidgetStateProperty.resolveWith<Color?>(
+              (Set<WidgetState> states) {
+            if (states.contains(WidgetState.pressed)) {
               return ColorValue.primaryColor.withOpacity(0); // efek splash
             }
             return null;

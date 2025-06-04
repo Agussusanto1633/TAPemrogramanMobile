@@ -182,7 +182,7 @@ class _PaymentPageState extends State<PaymentPage> {
                                         children: [
                                           Gap(7.h),
                                           Text(
-                                            "Servista",
+                                            "KoneksiJasa",
                                             style: textTheme.displayLarge!
                                                 .copyWith(
                                                   color:
@@ -339,7 +339,7 @@ class _PaymentPageState extends State<PaymentPage> {
                                                       .spaceBetween,
                                               children: [
                                                 Text(
-                                                  "0812345678910 a.n Servista",
+                                                  "0895383015559 a.n KoneksiJasa",
                                                   style: textTheme.displayLarge!
                                                       .copyWith(
                                                         color:
@@ -376,7 +376,7 @@ class _PaymentPageState extends State<PaymentPage> {
                                                               children: [
                                                                 QrImageView(
                                                                   data:
-                                                                      "0812345678910 a.n Servista",
+                                                                      "0895383015559 a.n KoneksiJasa",
                                                                   version:
                                                                       QrVersions
                                                                           .auto,

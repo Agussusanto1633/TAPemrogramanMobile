@@ -36,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               Gap(150.h),
               Text(
-                "Servista",
+                "KoneksiJasa",
                 style: GoogleFonts.onest(
                   fontSize: 40.sp,
                   fontWeight: FontWeight.w700,
@@ -44,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               Text(
-                "Welcome to Servista",
+                "Welcome to KoneksiJasa",
                 style: GoogleFonts.mulish(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
