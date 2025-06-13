@@ -1,4 +1,8 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
 import '../model/service_model.dart';
@@ -20,6 +24,26 @@ class ServiceRepository {
       throw Exception('Failed to fetch services: $e');
     }
   }
+  Future<List<ServiceModel>> getServicesBySeller(String sellerId) async {
+    try {
+      final QuerySnapshot snapshot = await _firestore
+          .collection('services')
+          .where('seller_id', isEqualTo: sellerId)
+          .get();
+      //print how many data
+      print('Number of services for seller $sellerId: ${snapshot.docs.length}');
+      print(sellerId);
+      return snapshot.docs.map((doc) {
+        return ServiceModel.fromJson(
+          doc.data() as Map<String, dynamic>,
+          doc.id,
+        );
+      }).toList();
+    } catch (e) {
+      throw Exception('Failed to fetch services: $e');
+    }
+  }
+
 
   Future<ServiceModel?> getServiceById(String serviceId) async {
     try {
@@ -177,5 +201,79 @@ class ServiceRepository {
     }
     print("Hasil status pekerja: $workerStatuses");
     return workerStatuses;
+  }
+
+  Future<String> uploadImageToCloudinary(File file) async {
+    final cloudName = 'dxk0ttpjw'; // Ganti dengan cloudname kamu
+    final uploadPreset = 'services'; // Ganti dengan upload preset kamu
+
+    final uri = Uri.parse('https://api.cloudinary.com/v1_1/$cloudName/image/upload');
+    final request = http.MultipartRequest('POST', uri)
+      ..fields['upload_preset'] = uploadPreset
+      ..files.add(await http.MultipartFile.fromPath('file', file.path));
+
+    final response = await request.send();
+    if (response.statusCode == 200) {
+      final res = await response.stream.bytesToString();
+      final jsonRes = json.decode(res);
+      return jsonRes['secure_url'];
+    } else {
+      throw Exception('Failed to upload image: ${response.statusCode}');
+    }
+  }
+
+  // 🔹 Fungsi 2: Create Service (upload semua gambar + simpan ke Firestore)
+  Future<void> createServiceWithImages({
+    required String name,
+    required String address,
+    required int price,
+    required String linkMaps,
+    required List<Facility> facilities,
+    required File mainImage,
+    required List<File> additionalPhotos,
+    required String sellerId,
+    required int duration,
+    required List<String> workerNames,
+  }) async {
+    try {
+      // Upload gambar utama
+      final mainImageUrl = await uploadImageToCloudinary(mainImage);
+
+      // Upload gambar tambahan
+      final List<String> additionalImageUrls = [];
+      for (final photo in additionalPhotos) {
+        final url = await uploadImageToCloudinary(photo);
+        additionalImageUrls.add(url);
+      }
+
+      // Buat ServiceModel
+      final newService = ServiceModel(
+        id: '', // Akan dibuat otomatis oleh Firestore
+        name: name,
+        address: address,
+        image: mainImageUrl,
+        range: 0.0,
+        rating: 0.0,
+        discount: 0,
+        price: price,
+        linkMaps: linkMaps,
+        facilities: facilities,
+        photos: additionalImageUrls,
+        reviews: [],
+        seller_id: sellerId,
+        serviceDurationMinutes: duration,
+        operatingDays: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+        availableTimeSlots: [
+          "08:00", "09:00", "10:00", "11:00",
+          "13:00", "14:00", "15:00", "16:00"
+        ],
+        workerNames: workerNames,
+      );
+
+      // Simpan ke Firestore
+      await _firestore.collection('services').add(newService.toJson());
+    } catch (e) {
+      throw Exception('Gagal membuat layanan: $e');
+    }
   }
 }

@@ -107,3 +107,22 @@ class ServiceLoadFailure extends ServiceState {
   @override
   List<Object> get props => [message];
 }
+
+class SellerServiceLoaded extends ServiceState {
+  final List<ServiceModel> services;
+
+  SellerServiceLoaded(this.services);
+}
+
+
+class CreateSellerServicesInProgress extends ServiceState {}
+
+class CreateSellerServicesSuccess extends ServiceState {}
+
+class CreateSellerServicesFailure extends ServiceState {
+  final String error;
+  const CreateSellerServicesFailure(this.error);
+
+  @override
+  List<Object> get props => [error];
+}

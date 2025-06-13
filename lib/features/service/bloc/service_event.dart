@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:servista/features/service/model/service_model.dart';
@@ -47,7 +49,34 @@ class LoadWorkerSlotStatuses extends ServiceEvent {
     required this.serviceId,
     required this.selectedDate,
     required this.service,
-    required this.selectedTime
+    required this.selectedTime,
+  });
+}
+
+class LoadSellerServices extends ServiceEvent {
+  final String sellerId;
+
+  const LoadSellerServices({required this.sellerId});
+}
+
+class CreateSellerServices extends ServiceEvent {
+  final ServiceModel serviceModel;
+  final String sellerId;
+  final File mainImage;
+  final List<File> additionalPhotos;
+
+  const CreateSellerServices({
+    required this.serviceModel,
+    required this.sellerId,
+    required this.mainImage,
+    required this.additionalPhotos,
   });
 
+  @override
+  List<Object> get props => [
+    serviceModel,
+    sellerId,
+    mainImage,
+    additionalPhotos,
+  ];
 }

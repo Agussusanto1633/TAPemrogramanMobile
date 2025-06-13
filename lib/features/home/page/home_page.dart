@@ -56,7 +56,6 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       backgroundColor: ColorValue.bgFrameColor,
-
       body: ScrollConfiguration(
         behavior: NoOverScrollEffectBehavior(),
         child: SingleChildScrollView(

@@ -13,6 +13,9 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
     on<LoadServiceDetail>(_onLoadServiceDetail);
     on<LoadTimeSlotStatuses>(_onLoadTimeSlotStatuses);
     on<LoadWorkerSlotStatuses>(_onLoadWorkerSlotStatuses);
+    on<LoadSellerServices>(_onLoadSellerServices);
+    on<CreateSellerServices>(_onCreateSellerServices);
+
   }
 
   Future<void> _onLoadAllServices(
@@ -80,4 +83,45 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
       emit(ServiceLoadFailure(e.toString()));
     }
   }
+
+  Future<void> _onLoadSellerServices(
+      LoadSellerServices event,
+      Emitter<ServiceState> emit,
+      ) async {
+    emit(ServiceLoading());
+    try {
+      final services = await _serviceRepository.getServicesBySeller(event.sellerId);
+      emit(ServiceSuccess(services: services, promoServices: [])); // atau pakai SellerServiceLoaded
+    } catch (e) {
+      emit(ServiceLoadFailure(e.toString()));
+    }
+  }
+
+  Future<void> _onCreateSellerServices(
+      CreateSellerServices event,
+      Emitter<ServiceState> emit,
+      ) async {
+    emit(CreateSellerServicesInProgress());
+    try {
+      await _serviceRepository.createServiceWithImages(
+        name: event.serviceModel.name,
+        address: event.serviceModel.address,
+        price: event.serviceModel.price,
+        linkMaps: event.serviceModel.linkMaps,
+        facilities: event.serviceModel.facilities,
+        mainImage: event.mainImage,
+        additionalPhotos: event.additionalPhotos,
+        sellerId: event.sellerId,
+        duration: event.serviceModel.serviceDurationMinutes,
+        workerNames: event.serviceModel.workerNames,
+      );
+
+      emit(CreateSellerServicesSuccess());
+    } catch (e) {
+      emit(CreateSellerServicesFailure(e.toString()));
+    }
+  }
+
+
+
 }

@@ -13,6 +13,7 @@ class ServiceModel {
   final List<Review> reviews;
 
   // --- Field tambahan untuk booking ---
+  final String seller_id;
   final int serviceDurationMinutes;
   final List<String> operatingDays;
   final List<String> availableTimeSlots;
@@ -32,6 +33,7 @@ class ServiceModel {
     required this.photos,
     required this.reviews,
     // --- Inisialisasi field tambahan ---
+    required this.seller_id,
     required this.serviceDurationMinutes,
     required this.operatingDays,
     required this.availableTimeSlots,
@@ -60,6 +62,7 @@ class ServiceModel {
           .toList() ??
           [],
       // --- Parsing field tambahan ---
+      seller_id: json['seller_id'] ?? '',
       serviceDurationMinutes: json['serviceDurationMinutes'] ?? 0,
       operatingDays: List<String>.from(json['operatingDays'] ?? []),
       availableTimeSlots: List<String>.from(json['availableTimeSlots'] ?? []),
@@ -81,6 +84,7 @@ class ServiceModel {
       'photos': photos,
       'reviews': reviews.map((item) => item.toJson()).toList(),
       // --- Serialisasi field tambahan ---
+      'seller_id': seller_id,
       'serviceDurationMinutes': serviceDurationMinutes,
       'operatingDays': operatingDays,
       'availableTimeSlots': availableTimeSlots,
