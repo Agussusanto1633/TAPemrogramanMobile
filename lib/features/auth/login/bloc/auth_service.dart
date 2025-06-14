@@ -36,6 +36,7 @@ class AuthService {
         'displayName': user.displayName ?? '',
         'photoURL': user.photoURL ?? '',
         'noHp': '', // Bisa diisi nanti via form update profil
+        'isSeller': false,
         'createdAt': FieldValue.serverTimestamp(),
       });
     }
@@ -113,6 +114,7 @@ class AuthService {
         'displayName': updatedUser.displayName,
         'noHp': noHp,
         'photoURL': updatedUser.photoURL ?? '',
+        'isSeller': false,
         'createdAt': FieldValue.serverTimestamp(),
       });
 

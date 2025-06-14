@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,11 +15,12 @@ import 'package:servista/features/auth/login/bloc/auth_state.dart';
 import 'package:servista/features/auth/login/view/page/login_email_page.dart';
 import 'package:servista/home_dummy.dart';
 
+import '../../../../../core/nav_bar/admin_nav_bar.dart';
 import '../../../../../core/nav_bar/nav_bar.dart';
 import '../../bloc/auth_event.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -53,18 +55,49 @@ class _LoginPageState extends State<LoginPage> {
               ),
               Spacer(),
               BlocConsumer<AuthBloc, AuthState>(
-                listener: (context, state) {
+                listener: (context, state) async {
                   if (state is AuthSignedIn) {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => NavBar()),
-                    );
+                    final uid = state.user?.uid;
+                    if (uid != null) {
+                      final doc =
+                          await FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(uid)
+                              .get();
+                      final isSeller = doc.data()?['isSeller'] ?? false;
+
+                      if (isSeller == true) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AdminNavBar(),
+                          ),
+                        );
+                      } else {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const NavBar(),
+                          ),
+                        );
+                      }
+                    } else {
+                      // Gagal ambil UID
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            "Login gagal: tidak dapat mengambil data pengguna.",
+                          ),
+                        ),
+                      );
+                    }
                   } else if (state is AuthError) {
                     ScaffoldMessenger.of(
                       context,
                     ).showSnackBar(SnackBar(content: Text(state.error)));
                   }
                 },
+
                 builder: (context, state) {
                   if (state is AuthLoading) {
                     // Tampilkan indikator loading

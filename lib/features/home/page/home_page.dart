@@ -82,11 +82,12 @@ class _HomePageState extends State<HomePage> {
                             height: 36.h,
                             decoration: ShapeDecoration(
                               image: DecorationImage(
-                                image: NetworkImage(
-                                  photoUrl.isNotEmpty
-                                      ? photoUrl
-                                      : 'https://example.com/default_profile.png',
-                                ),
+                                image:
+                                    photoUrl.isNotEmpty
+                                        ? NetworkImage(photoUrl)
+                                        : AssetImage(
+                                          "assets/images/profile/profile.png",
+                                        ),
                                 fit: BoxFit.cover,
                               ),
                               shape: RoundedRectangleBorder(

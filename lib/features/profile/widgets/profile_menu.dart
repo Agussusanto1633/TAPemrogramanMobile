@@ -10,13 +10,18 @@ class ProfileMenu extends StatelessWidget {
   //add optional bool parameter for isSelected
   final bool isArrow;
 
-   ProfileMenu({super.key, required this.title, required this.icon, this.isArrow = true});
+  ProfileMenu({
+    super.key,
+    required this.title,
+    required this.icon,
+    this.isArrow = true,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding:  EdgeInsets.symmetric(horizontal: 10.w, vertical: 12.5.h),
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 12.5.h),
       decoration: BoxDecoration(
         color: ColorValue.dark2Color,
         borderRadius: BorderRadius.circular(10.r),
@@ -28,6 +33,7 @@ class ProfileMenu extends StatelessWidget {
               icon,
               width: 18.w,
               height: 18.h,
+              color: Colors.white,
             ),
             Gap(5.w),
             Text(
@@ -39,12 +45,13 @@ class ProfileMenu extends StatelessWidget {
               ),
             ),
             Spacer(),
-            isArrow ?
-            SvgPicture.asset(
-              "assets/icons/arrow_fat.svg",
-              width: 24.w,
-              height: 24.h,
-            ): Container()
+            isArrow
+                ? SvgPicture.asset(
+                  "assets/icons/arrow_fat.svg",
+                  width: 24.w,
+                  height: 24.h,
+                )
+                : Container(),
           ],
         ),
       ),

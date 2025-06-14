@@ -11,6 +11,8 @@ class ProfileLoaded extends ProfileState {
   ProfileLoaded(this.user);
 }
 
+class ProfileUpdated extends ProfileState {}
+
 class ProfileError extends ProfileState {
   final String message;
   ProfileError(this.message);

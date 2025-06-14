@@ -16,7 +16,13 @@ class ProfileHeader extends StatelessWidget {
   final String userEmail;
   final String userPhoneNumber;
 
-  const ProfileHeader({Key? key, required this.userName, required this.userPhotoURL, required this.userEmail, required this.userPhoneNumber}) : super(key: key);
+  const ProfileHeader({
+    Key? key,
+    required this.userName,
+    required this.userPhotoURL,
+    required this.userEmail,
+    required this.userPhoneNumber,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,16 +35,16 @@ class ProfileHeader extends StatelessWidget {
               height: 150.w,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(
-                  color: ColorValue.primaryColor,
-                  width: 5.w,
-                ),
+                border: Border.all(color: ColorValue.primaryColor, width: 5.w),
               ),
               child: ClipOval(
-                child: Image.network(
-                  userPhotoURL,
-                  fit: BoxFit.cover,
-                ),
+                child:
+                    userPhotoURL.isEmpty
+                        ? Image.asset(
+                          "assets/images/profile/profile.png",
+                          fit: BoxFit.cover,
+                        )
+                        : Image.network(userPhotoURL, fit: BoxFit.cover),
               ),
             ),
             Positioned(
