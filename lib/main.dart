@@ -29,6 +29,7 @@ import 'core/theme/app_theme.dart';
 import 'features/booking/bloc/booking_bloc.dart';
 import 'features/chat/page/chat_page.dart';
 import 'features/payment/cubit/payment_cubit.dart';
+import 'features/profile/bloc/profile_bloc.dart';
 import 'features/profile/page/profile_page.dart';
 import 'features/service/bloc/service_bloc.dart';
 import 'features/service/cubit/service_cubit.dart';
@@ -64,7 +65,10 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(create: (_) => ServiceCubit()),
         BlocProvider(create: (_) => PaymentCubit()),
-        BlocProvider(create: (_) => BookingBloc(firestore: FirebaseFirestore.instance)),
+        BlocProvider(
+          create: (_) => BookingBloc(firestore: FirebaseFirestore.instance),
+        ),
+        BlocProvider(create: (context) => ProfileBloc()),
       ],
       child: ScreenUtilInit(
         designSize: const Size(360, 640),
@@ -77,7 +81,7 @@ class MyApp extends StatelessWidget {
             home: child,
           );
         },
-        child: AdminNavBar(),
+        child: AuthenticationPage(),
       ),
     );
   }

@@ -69,11 +69,12 @@ class _AdminHomePageState extends State<AdminHomePage> {
                             height: 36.h,
                             decoration: ShapeDecoration(
                               image: DecorationImage(
-                                image: NetworkImage(
-                                  photoUrl.isNotEmpty
-                                      ? photoUrl
-                                      : 'https://example.com/default_profile.png',
-                                ),
+                                image:
+                                    photoUrl.isNotEmpty
+                                        ? NetworkImage(photoUrl)
+                                        : AssetImage(
+                                          "assets/images/profile/profile.png",
+                                        ),
                                 fit: BoxFit.cover,
                               ),
                               shape: RoundedRectangleBorder(
@@ -115,17 +116,23 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: Row(
                   children: [
-                    Text("Riwayat Penyewaan", style: textTheme.bodyLarge!.copyWith(
-                      color: ColorValue.darkColor,
-                      fontWeight: AppFontWeight.regular,
-                      fontSize: 16.sp,
-                    )),
+                    Text(
+                      "Riwayat Penyewaan",
+                      style: textTheme.bodyLarge!.copyWith(
+                        color: ColorValue.darkColor,
+                        fontWeight: AppFontWeight.regular,
+                        fontSize: 16.sp,
+                      ),
+                    ),
                     Spacer(),
-                    Text("Lihat Semua", style: textTheme.bodyMedium!.copyWith(
-                      color: ColorValue.darkColor,
-                      fontWeight: AppFontWeight.regular,
-                      fontSize: 12.sp,
-                    )),
+                    Text(
+                      "Lihat Semua",
+                      style: textTheme.bodyMedium!.copyWith(
+                        color: ColorValue.darkColor,
+                        fontWeight: AppFontWeight.regular,
+                        fontSize: 12.sp,
+                      ),
+                    ),
                     SizedBox(width: 5.w),
                     SvgPicture.asset("assets/icons/arrow.svg"),
                   ],
@@ -184,8 +191,6 @@ class _AdminHomePageState extends State<AdminHomePage> {
                               ),
                             ],
                           ),
-                          
-
                         ],
                       ),
                     ),
@@ -197,11 +202,14 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 alignment: Alignment.centerLeft,
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
-                  child: Text("Ringkasan Pendapatan", style: textTheme.bodyLarge!.copyWith(
-                    color: ColorValue.darkColor,
-                    fontWeight: AppFontWeight.regular,
-                    fontSize: 16.sp,
-                  )),
+                  child: Text(
+                    "Ringkasan Pendapatan",
+                    style: textTheme.bodyLarge!.copyWith(
+                      color: ColorValue.darkColor,
+                      fontWeight: AppFontWeight.regular,
+                      fontSize: 16.sp,
+                    ),
+                  ),
                 ),
               ),
               Gap(16.h),
@@ -212,7 +220,12 @@ class _AdminHomePageState extends State<AdminHomePage> {
                     children: [
                       Expanded(
                         flex: 10,
-                          child: FinancialInfoCard(title: "Pendapatan bulan ini", value: "7.200.000", baseFontSize: 36.sp,)),
+                        child: FinancialInfoCard(
+                          title: "Pendapatan bulan ini",
+                          value: "7.200.000",
+                          baseFontSize: 36.sp,
+                        ),
+                      ),
                       SizedBox(width: 10.w),
                       Expanded(
                         flex: 8,
@@ -225,7 +238,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                     ],
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -233,4 +246,3 @@ class _AdminHomePageState extends State<AdminHomePage> {
     );
   }
 }
-

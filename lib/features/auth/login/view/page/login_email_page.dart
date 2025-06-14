@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,6 +11,7 @@ import 'package:servista/features/auth/login/bloc/auth_bloc.dart';
 import 'package:servista/features/auth/login/bloc/auth_event.dart';
 import 'package:servista/features/auth/login/bloc/auth_state.dart';
 import 'package:servista/features/auth/register/view/register_email_page.dart';
+import '../../../../../core/nav_bar/admin_nav_bar.dart';
 import '../../../../../core/nav_bar/nav_bar.dart';
 
 class LoginEmailPage extends StatefulWidget {
@@ -30,16 +32,30 @@ class _LoginEmailPageState extends State<LoginEmailPage> {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w),
           child: BlocConsumer<AuthBloc, AuthState>(
-            listener: (context, state) {
+            listener: (context, state) async {
               if (state is AuthError) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(state.error)),
-                );
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text(state.error)));
               } else if (state is AuthSignedIn) {
+                final uid = state.user.uid;
+                final snapshot =
+                    await FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(uid)
+                        .get();
+                final data = snapshot.data();
+                final isSeller = data?['isSeller'] ?? false;
+
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text("Login berhasil!")),
                 );
-                Nav.toRemoveUntil(context, const NavBar());
+
+                if (isSeller == true) {
+                  Nav.toRemoveUntil(context, const AdminNavBar());
+                } else {
+                  Nav.toRemoveUntil(context, const NavBar());
+                }
               }
             },
             builder: (context, state) {
@@ -83,29 +99,28 @@ class _LoginEmailPageState extends State<LoginEmailPage> {
                     state is AuthLoading
                         ? const CircularProgressIndicator()
                         : GestureDetector(
-                      onTap: () {
-                        final email = emailController.text.trim();
-                        final password = passwordController.text.trim();
+                          onTap: () {
+                            final email = emailController.text.trim();
+                            final password = passwordController.text.trim();
 
-                        if (email.isEmpty || password.isEmpty) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content:
-                              Text('Semua field wajib diisi'),
-                            ),
-                          );
-                          return;
-                        }
+                            if (email.isEmpty || password.isEmpty) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Semua field wajib diisi'),
+                                ),
+                              );
+                              return;
+                            }
 
-                        context.read<AuthBloc>().add(
-                          AuthSignInWithEmail(
-                            email: email,
-                            password: password,
-                          ),
-                        );
-                      },
-                      child: CustomButtonWidget(label: "Login"),
-                    ),
+                            context.read<AuthBloc>().add(
+                              AuthSignInWithEmail(
+                                email: email,
+                                password: password,
+                              ),
+                            );
+                          },
+                          child: CustomButtonWidget(label: "Login"),
+                        ),
                     Gap(20.h),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
