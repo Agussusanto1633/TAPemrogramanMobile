@@ -364,42 +364,7 @@ class _PaymentPageState extends State<PaymentPage> {
                                                                   16,
                                                                 ),
                                                           ),
-                                                          child: Padding(
-                                                            padding:
-                                                                EdgeInsets.all(
-                                                                  18.0.w,
-                                                                ),
-                                                            child: Column(
-                                                              mainAxisSize:
-                                                                  MainAxisSize
-                                                                      .min,
-                                                              children: [
-                                                                QrImageView(
-                                                                  data:
-                                                                      "0895383015559 a.n KoneksiJasa",
-                                                                  version:
-                                                                      QrVersions
-                                                                          .auto,
-                                                                  size:
-                                                                      187.w, // Ukuran QR Code sesuai permintaan
-                                                                ),
-                                                                SizedBox(
-                                                                  height: 9.h,
-                                                                ),
-                                                                Text(
-                                                                  "Scan QR Code",
-                                                                  style: textTheme
-                                                                      .bodySmall!
-                                                                      .copyWith(
-                                                                        fontSize:
-                                                                            22.sp,
-                                                                        fontWeight:
-                                                                            AppFontWeight.regular,
-                                                                      ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
+                                                          child: Image.asset("assets/images/payment/qr.jpg")
                                                         );
                                                       },
                                                     );
@@ -522,6 +487,7 @@ class _PaymentPageState extends State<PaymentPage> {
                                           userId: userId.toString(),
                                           workerId: serviceData.selectedWorker!,
                                           createdAt: DateTime.now(),
+                                          sellerId: serviceData.serviceModel!.seller_id,
                                         );
 
                                         context

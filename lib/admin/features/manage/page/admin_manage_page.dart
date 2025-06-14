@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:servista/admin/features/manage/page/admin_create_service_page.dart';
-import 'package:servista/admin/features/manage/page/admin_edit_service_page.dart';
 import 'package:servista/core/theme/color_value.dart';
 import 'package:servista/features/service/bloc/service_bloc.dart';
 import 'package:servista/features/service/bloc/service_state.dart';
@@ -91,7 +90,9 @@ class _AdminManagePageState extends State<AdminManagePage> {
             BlocBuilder<ServiceBloc, ServiceState>(
               builder: (context, state) {
                 if (state is ServiceLoading) {
-                  return const Center(child: CircularProgressIndicator());
+                  return Container(
+                    height: MediaQuery.of(context).size.height/2,
+                      child: const Center(child: CircularProgressIndicator()));
                 } else if (state is ServiceSuccess) {
                   if (state.services.isEmpty) {
                     return Center(child: Text('Tidak ada service milik Anda. ${sellerId}'));
@@ -107,14 +108,7 @@ class _AdminManagePageState extends State<AdminManagePage> {
                         final service = state.services[index];
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 12),
-                          child: GestureDetector(
-                            onTap: () {
-                              Nav.to(context, AdminEditServicePage(
-                                service: service,
-
-                              ));
-                            },
-                              child: YourVerticalServiceCard(service: service)),
+                          child: YourVerticalServiceCard(service: service),
                         );
                       },
                     ),

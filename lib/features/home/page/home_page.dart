@@ -26,7 +26,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<String> locations = ['Malang', 'Surabaya', 'Jakarta', 'Bandung'];
   String selectedLocation = 'Malang';
-  late String displayName;
+  String displayName = '';
   String email = '';
   String photoUrl = '';
   //trim displayName to first word

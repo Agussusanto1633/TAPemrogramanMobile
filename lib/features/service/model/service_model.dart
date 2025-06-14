@@ -18,6 +18,7 @@ class ServiceModel {
   final List<String> operatingDays;
   final List<String> availableTimeSlots;
   final List<String> workerNames;
+  //createdAt
 
   ServiceModel({
     required this.id,
@@ -89,6 +90,7 @@ class ServiceModel {
       'operatingDays': operatingDays,
       'availableTimeSlots': availableTimeSlots,
       'workerNames': workerNames,
+      'createdAt': DateTime.now().toUtc().toIso8601String(),
     };
   }
 }

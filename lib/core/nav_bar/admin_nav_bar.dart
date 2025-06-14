@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:servista/admin/features/home/page/admin_home_page.dart';
+import 'package:servista/admin/features/home/profile/admin_profile_page.dart';
 import 'package:servista/admin/features/manage/page/admin_manage_page.dart';
+import 'package:servista/admin/features/transaction/page/admin_transaction_page.dart';
 import 'package:servista/core/theme/color_value.dart';
 
 class AdminNavBar extends StatefulWidget {
@@ -14,10 +16,9 @@ class _AdminNavBarState extends State<AdminNavBar> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = const [
-    AdminHomePage(),
     AdminManagePage(),
-    AdminManagePage(), // <- Tambahkan di sini
-    AdminHomePage(), // Profil
+    AdminTransactionPage(),
+    AdminProfilePage()
   ];
 
   void _onItemTapped(int index) {
@@ -60,11 +61,6 @@ class _AdminNavBarState extends State<AdminNavBar> {
           showUnselectedLabels: true,
           selectedLabelStyle: _labelStyle(_selectedIndex),
           items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home_outlined),
-              activeIcon: Icon(Icons.home, size: 28),
-              label: 'Beranda',
-            ),
             BottomNavigationBarItem(
               icon: Icon(Icons.manage_accounts_outlined),
               activeIcon: Icon(Icons.manage_accounts, size: 28),

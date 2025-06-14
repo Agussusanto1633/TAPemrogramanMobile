@@ -6,6 +6,7 @@ class PaymentModel {
   final String serviceId;
   final String status;
   final String userId;
+  final String sellerId;
   final String workerId;
   final DateTime createdAt;
 
@@ -17,6 +18,7 @@ class PaymentModel {
     required this.serviceId,
     required this.status,
     required this.userId,
+    required this.sellerId,
     required this.workerId,
     required this.createdAt,
   });
@@ -28,6 +30,7 @@ class PaymentModel {
       'endTime': endTime,
       'price': price,
       'serviceId': serviceId,
+      'sellerId': sellerId,
       'status': status,
       'userId': userId,
       'workerId': workerId,

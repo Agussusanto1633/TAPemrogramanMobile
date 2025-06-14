@@ -107,6 +107,7 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
         name: event.serviceModel.name,
         address: event.serviceModel.address,
         price: event.serviceModel.price,
+        discount: event.serviceModel.discount,
         linkMaps: event.serviceModel.linkMaps,
         facilities: event.serviceModel.facilities,
         mainImage: event.mainImage,
@@ -114,6 +115,7 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
         sellerId: event.sellerId,
         duration: event.serviceModel.serviceDurationMinutes,
         workerNames: event.serviceModel.workerNames,
+
       );
 
       emit(CreateSellerServicesSuccess());

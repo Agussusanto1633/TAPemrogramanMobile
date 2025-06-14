@@ -19,11 +19,12 @@ class PaymentCubit extends Cubit<PaymentState> {
           .collection('bookings')
           .doc(customId)
           .set(payment.toMap());
-
       emit(PaymentSuccess());
       print("succes bree");
     } catch (e) {
       emit(PaymentFailure(e.toString()));
     }
   }
+
+
 }

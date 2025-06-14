@@ -4,20 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:servista/admin/features/home/page/admin_home_page.dart';
-import 'package:servista/admin/features/income/page/admin_income_page.dart';
-import 'package:servista/admin/features/manage/page/admin_create_service_page.dart';
-import 'package:servista/core/nav_bar/admin_nav_bar.dart';
+import 'package:servista/admin/features/transaction/repository/admin_payment_repository.dart';
 import 'package:servista/features/auth/login/bloc/auth_bloc.dart';
 import 'package:servista/features/auth/login/bloc/auth_service.dart';
-import 'package:servista/features/auth/login/view/page/login_otp_page.dart';
-import 'package:servista/features/auth/login/view/page/login_page.dart';
-import 'package:servista/features/auth/login/view/page/login_phone_page.dart';
-import 'package:servista/features/booking/page/detail_booking_page.dart';
-import 'package:servista/features/home/page/search_service_page.dart';
-import 'package:servista/features/payment/page/payment_page.dart';
-import 'package:servista/features/service/pages/detail_service_page.dart';
-import 'package:servista/features/service/pages/service_booking_page.dart';
+import 'package:servista/features/payment/bloc/payment_bloc.dart';
 import 'package:servista/features/splash/view/page/splash_page.dart';
 import 'package:servista/features/home/page/home_page.dart';
 import 'package:servista/firestore/firestore_page.dart';
@@ -69,6 +59,11 @@ class MyApp extends StatelessWidget {
           create: (_) => BookingBloc(firestore: FirebaseFirestore.instance),
         ),
         BlocProvider(create: (context) => ProfileBloc()),
+        BlocProvider(
+          create: (context) => PaymentBloc(
+            PaymentRepository()
+          ),
+        ),
       ],
       child: ScreenUtilInit(
         designSize: const Size(360, 640),

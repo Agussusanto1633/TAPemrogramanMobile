@@ -13,6 +13,7 @@ import '../../../../features/service/model/service_model.dart';
 
 class AdminCreateServicePage extends StatefulWidget {
   final String sellerId;
+
   const AdminCreateServicePage({super.key, required this.sellerId});
 
   @override
@@ -23,7 +24,7 @@ class _AdminCreateServicePageState extends State<AdminCreateServicePage> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
-  final TextEditingController durationController = TextEditingController();
+  final TextEditingController discountController = TextEditingController();
   final TextEditingController linkMapsController = TextEditingController();
 
   List<TextEditingController> workerControllers = [TextEditingController()];
@@ -176,11 +177,7 @@ class _AdminCreateServicePageState extends State<AdminCreateServicePage> {
                     right: 0,
                     top: 0,
                     child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          photoFiles.remove(file);
-                        });
-                      },
+                      onTap: () => setState(() => photoFiles.remove(file)),
                       child: const CircleAvatar(
                         radius: 12,
                         backgroundColor: Colors.red,
@@ -253,13 +250,12 @@ class _AdminCreateServicePageState extends State<AdminCreateServicePage> {
           );
         }),
         GestureDetector(
-          onTap: () {
-            setState(() {
-              facilities.add(
-                MapEntry(TextEditingController(), TextEditingController()),
-              );
-            });
-          },
+          onTap:
+              () => setState(
+                () => facilities.add(
+                  MapEntry(TextEditingController(), TextEditingController()),
+                ),
+              ),
           child: CustomButtonWidget(label: "Tambah Fasilitas"),
         ),
       ],
@@ -308,10 +304,41 @@ class _AdminCreateServicePageState extends State<AdminCreateServicePage> {
   }
 
   void _submit() {
+    if (nameController.text.trim().isEmpty ||
+        addressController.text.trim().isEmpty ||
+        priceController.text.trim().isEmpty ||
+        discountController.text.trim().isEmpty ||
+        linkMapsController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Semua field wajib diisi!')));
+      return;
+    }
+
+    final discountValue = int.tryParse(discountController.text.trim()) ?? 0;
+    if (discountValue > 100) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Diskon tidak boleh lebih dari 100%')));
+      return;
+    }
+
+    if (priceController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Harga tidak boleh kosong!')));
+      return;
+    }
+
+
+
     if (mainImageFile == null) {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text('Pilih gambar utama dulu!')));
+      return;
+    }
+
+    if (photoFiles.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Minimal 1 foto tambahan harus dipilih!')),
+      );
       return;
     }
 
@@ -320,6 +347,13 @@ class _AdminCreateServicePageState extends State<AdminCreateServicePage> {
             .map((e) => e.text.trim())
             .where((e) => e.isNotEmpty)
             .toList();
+    if (workers.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Minimal isi 1 nama pekerja!')),
+      );
+      return;
+    }
+
     final fasilitas =
         facilities
             .where(
@@ -334,28 +368,29 @@ class _AdminCreateServicePageState extends State<AdminCreateServicePage> {
               ),
             )
             .toList();
+    if (fasilitas.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Minimal isi 1 fasilitas lengkap!')),
+      );
+      return;
+    }
 
     final service = ServiceModel(
       id: '',
-      // akan digenerate di Firestore
       name: nameController.text.trim(),
       address: addressController.text.trim(),
       image: '',
-      // nanti akan diganti di repository setelah upload
       range: 0.0,
       rating: 0.0,
-      discount: 0,
+      discount: int.tryParse(discountController.text) ?? 0,
       price: int.tryParse(priceController.text) ?? 0,
       linkMaps: linkMapsController.text.trim(),
       facilities: fasilitas,
       photos: [],
-      // nanti diisi di repository setelah upload
       reviews: [],
       seller_id: widget.sellerId,
-      // kamu bisa ambil dari auth nanti
-      serviceDurationMinutes: int.tryParse(durationController.text) ?? 0,
+      serviceDurationMinutes: 0,
       operatingDays: [],
-      // bisa ditambah kalau sudah ada
       availableTimeSlots: [],
       workerNames: workers,
     );
@@ -363,7 +398,7 @@ class _AdminCreateServicePageState extends State<AdminCreateServicePage> {
     context.read<ServiceBloc>().add(
       CreateSellerServices(
         serviceModel: service,
-        sellerId: "aaa",
+        sellerId: widget.sellerId,
         mainImage: mainImageFile!,
         additionalPhotos: photoFiles,
       ),
@@ -395,14 +430,14 @@ class _AdminCreateServicePageState extends State<AdminCreateServicePage> {
                     (_) => const Center(child: CircularProgressIndicator()),
               );
             } else {
-              Navigator.pop(context); // tutup loading
+              Navigator.pop(context);
             }
 
             if (state is CreateSellerServicesSuccess) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Berhasil menambahkan layanan!')),
               );
-              Navigator.pop(context); // kembali ke halaman sebelumnya
+              Navigator.pop(context);
             } else if (state is CreateSellerServicesFailure) {
               ScaffoldMessenger.of(
                 context,
@@ -420,8 +455,8 @@ class _AdminCreateServicePageState extends State<AdminCreateServicePage> {
                 inputType: TextInputType.number,
               ),
               _buildTextField(
-                'Durasi (menit)',
-                durationController,
+                'Diskon (%)',
+                discountController,
                 inputType: TextInputType.number,
               ),
               _buildTextField('Link Maps', linkMapsController),

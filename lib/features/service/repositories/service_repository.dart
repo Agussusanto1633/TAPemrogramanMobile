@@ -30,9 +30,6 @@ class ServiceRepository {
           .collection('services')
           .where('seller_id', isEqualTo: sellerId)
           .get();
-      //print how many data
-      print('Number of services for seller $sellerId: ${snapshot.docs.length}');
-      print(sellerId);
       return snapshot.docs.map((doc) {
         return ServiceModel.fromJson(
           doc.data() as Map<String, dynamic>,
@@ -227,6 +224,7 @@ class ServiceRepository {
     required String name,
     required String address,
     required int price,
+    required int discount,
     required String linkMaps,
     required List<Facility> facilities,
     required File mainImage,
@@ -254,7 +252,7 @@ class ServiceRepository {
         image: mainImageUrl,
         range: 0.0,
         rating: 0.0,
-        discount: 0,
+        discount: discount,
         price: price,
         linkMaps: linkMaps,
         facilities: facilities,
