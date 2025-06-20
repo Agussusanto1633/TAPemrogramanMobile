@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../core/scroll/scroll_behavior.dart';
 import '../../../core/theme/color_value.dart';
+import '../../service/bloc/service_bloc.dart';
+import '../../service/bloc/service_state.dart';
 import '../../service/widgets/service_card.dart';
 
 class SearchServicePage extends StatefulWidget {
@@ -68,7 +71,7 @@ class _SearchServicePageState extends State<SearchServicePage> {
             Expanded(
               child: Container(
                 width: MediaQuery.of(context).size.width,
-                // padding: EdgeInsets.symmetric(horizontal: 20.w),
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
                 decoration: BoxDecoration(
                   color: ColorValue.bgFrameColor,
                   borderRadius: BorderRadius.only(
@@ -76,16 +79,25 @@ class _SearchServicePageState extends State<SearchServicePage> {
                     topRight: Radius.circular(25.r),
                   ),
                 ),
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  physics: BouncingScrollPhysics(),
-                  padding: EdgeInsets.symmetric(
-                    vertical: 20.w,
-                    horizontal: 20.w,
-                  ),
-                  itemCount: 8,
-                  itemBuilder: (context, index) {
-                    return ServiceCard();
+                child: BlocBuilder<ServiceBloc, ServiceState>(
+                  builder: (context, state) {
+                    if (state is ServiceLoading) {
+                      return Center(child: CircularProgressIndicator());
+                    } else if (state is ServiceSuccess) {
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        physics: BouncingScrollPhysics(),
+                        padding: EdgeInsets.only(top: 15.w),
+                        itemCount: state.services.length,
+                        itemBuilder: (context, index) {
+                          return ServiceCard(service: state.services[index]);
+                        },
+                      );
+                    } else if (state is ServiceLoadFailure) {
+                      return Center(child: Text(state.message));
+                    } else {
+                      return Center(child: Text("No data available"));
+                    }
                   },
                 ),
               ),

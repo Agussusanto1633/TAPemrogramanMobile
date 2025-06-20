@@ -113,19 +113,22 @@ class _PaymentEticketPageState extends State<PaymentEticketPage> {
                                           children: [
                                             Text(
                                               "Potong Rumput",
-                                              style: textTheme.bodyMedium!.copyWith(
-                                                color: ColorValue.darkColor,
-                                                fontSize: 16.sp,
-                                                fontWeight: FontWeight.bold,
-                                              ),
+                                              style: textTheme.bodyMedium!
+                                                  .copyWith(
+                                                    color: ColorValue.darkColor,
+                                                    fontSize: 16.sp,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
                                             ),
                                             Text(
                                               "${DateFormat("EEEE, d MMMM yyyy", 'id_ID').format(state.selectedDate!)} | ${state.selectedTime}",
-                                              style: textTheme.bodyMedium!.copyWith(
-                                                color: ColorValue.darkColor,
-                                                fontSize: 12.sp,
-                                                fontWeight: AppFontWeight.regular,
-                                              ),
+                                              style: textTheme.bodyMedium!
+                                                  .copyWith(
+                                                    color: ColorValue.darkColor,
+                                                    fontSize: 12.sp,
+                                                    fontWeight:
+                                                        AppFontWeight.regular,
+                                                  ),
                                             ),
                                           ],
                                         ),
@@ -135,55 +138,40 @@ class _PaymentEticketPageState extends State<PaymentEticketPage> {
                                   Container(
                                     width: double.infinity,
                                     color: Colors.white,
-                                    padding: EdgeInsets.symmetric(horizontal: 22.w),
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 22.w,
+                                    ),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Gap(19.h),
-                                        Text(
-                                          "Booking Code",
-                                          style: textTheme.bodySmall!.copyWith(
-                                            fontSize: 12.sp,
-                                            fontWeight: AppFontWeight.regular,
-                                            color: ColorValue.darkColor,
+                                        Center(
+                                          child: Text(
+                                            "Koneksijasa - KoneksiJasa",
+                                            style: textTheme.bodySmall!
+                                                .copyWith(
+                                                  fontSize: 14.sp,
+                                                  fontWeight:
+                                                      AppFontWeight.semiBold,
+                                                  color: ColorValue.darkColor,
+                                                ),
                                           ),
                                         ),
-                                        Gap(1.h),
-                                        Text("3123182",
-                                          style: textTheme.bodySmall!.copyWith(
-                                            fontSize: 24.sp,
-                                            fontWeight: AppFontWeight.bold,
-                                            color: ColorValue.darkColor,
-                                          ),
-                                        ),
+
                                         Gap(14.h),
-                                        Align(
-                                          alignment: Alignment.center,
-                                          child: QrImageView(
-                                            data:
-                                            "Data Kirim",
-                                            version:
-                                            QrVersions.auto,
-                                            size:
-                                            148.w,
+
+                                        Padding(
+                                          padding:  EdgeInsets.symmetric(horizontal:24.w),
+                                          child: Image.asset(
+                                            "assets/images/payment/qris.png",
                                           ),
                                         ),
-                                        Gap(14.h),
-                                        Align(
-                                          alignment: Alignment.center,
-                                          child: Text("Tunjukkan tiket ini ke pekerja",
-                                            style: textTheme.bodySmall!.copyWith(
-                                              fontSize: 12.sp,
-                                              fontWeight: AppFontWeight.regular,
-                                              color: ColorValue.darkColor,
-                                              fontStyle: FontStyle.italic
-                                            ),
-                                          ),
-                                        ),
-                                        Gap(32.h),
+                                        Gap(24.h),
                                       ],
                                     ),
                                   ),
+
                                 ],
                               ),
                             ),
@@ -198,7 +186,7 @@ class _PaymentEticketPageState extends State<PaymentEticketPage> {
                                   width: 40.w,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(100.w),
-                                    color: ColorValue.bgFrameColor
+                                    color: ColorValue.bgFrameColor,
                                   ),
                                 ),
                               ),
@@ -213,14 +201,17 @@ class _PaymentEticketPageState extends State<PaymentEticketPage> {
                           child: Container(
                             padding: EdgeInsets.all(10.w),
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(7.r)),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(7.r),
+                              ),
                               border: Border.all(
                                 color: ColorValue.darkColor,
                                 width: 2,
-                              )
+                              ),
                             ),
                             child: Center(
-                              child: Text("Kembali",
+                              child: Text(
+                                "Kembali",
                                 style: textTheme.bodySmall!.copyWith(
                                   fontSize: 14.sp,
                                   fontWeight: AppFontWeight.semiBold,
@@ -232,7 +223,7 @@ class _PaymentEticketPageState extends State<PaymentEticketPage> {
                         ),
                         Gap(10.h),
                         CustomButtonWidget(label: "Unduh E-Tiket"),
-                        Gap(13.h)
+                        Gap(13.h),
                       ],
                     ),
                   ),
