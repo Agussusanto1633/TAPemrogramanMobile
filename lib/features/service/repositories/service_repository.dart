@@ -12,24 +12,9 @@ class ServiceRepository {
 
   Future<List<ServiceModel>> getServices() async {
     try {
-      final QuerySnapshot snapshot = await _firestore.collection('services').get();
+      final QuerySnapshot snapshot =
+          await _firestore.collection('services').get();
 
-      return snapshot.docs.map((doc) {
-        return ServiceModel.fromJson(
-            doc.data() as Map<String, dynamic>,
-            doc.id
-        );
-      }).toList();
-    } catch (e) {
-      throw Exception('Failed to fetch services: $e');
-    }
-  }
-  Future<List<ServiceModel>> getServicesBySeller(String sellerId) async {
-    try {
-      final QuerySnapshot snapshot = await _firestore
-          .collection('services')
-          .where('seller_id', isEqualTo: sellerId)
-          .get();
       return snapshot.docs.map((doc) {
         return ServiceModel.fromJson(
           doc.data() as Map<String, dynamic>,
@@ -41,18 +26,33 @@ class ServiceRepository {
     }
   }
 
+  Future<List<ServiceModel>> getServicesBySeller(String sellerId) async {
+    try {
+      final QuerySnapshot snapshot =
+          await _firestore
+              .collection('services')
+              .where('seller_id', isEqualTo: sellerId)
+              .get();
+      return snapshot.docs.map((doc) {
+        return ServiceModel.fromJson(
+          doc.data() as Map<String, dynamic>,
+          doc.id,
+        );
+      }).toList();
+    } catch (e) {
+      throw Exception('Failed to fetch services: $e');
+    }
+  }
 
   Future<ServiceModel?> getServiceById(String serviceId) async {
     try {
-      final DocumentSnapshot doc = await _firestore
-          .collection('services')
-          .doc(serviceId)
-          .get();
+      final DocumentSnapshot doc =
+          await _firestore.collection('services').doc(serviceId).get();
 
       if (doc.exists) {
         return ServiceModel.fromJson(
-            doc.data() as Map<String, dynamic>,
-            doc.id
+          doc.data() as Map<String, dynamic>,
+          doc.id,
         );
       }
       return null;
@@ -63,10 +63,11 @@ class ServiceRepository {
 
   Future<List<ServiceModel>> getPromoServices() async {
     try {
-      final QuerySnapshot snapshot = await _firestore
-          .collection('services')
-          .where('discount', isGreaterThan: 0)
-          .get();
+      final QuerySnapshot snapshot =
+          await _firestore
+              .collection('services')
+              .where('discount', isGreaterThan: 0)
+              .get();
 
       return snapshot.docs.map((doc) {
         return ServiceModel.fromJson(
@@ -99,7 +100,9 @@ class ServiceRepository {
 
     // Jika tidak ada pekerja yang terdefinisi, anggap semua slot tidak tersedia (atau handle sesuai bisnismu)
     if (totalWorkers == 0) {
-      print("Tidak ada pekerja yang terdefinisi untuk layanan ini, semua slot dianggap tidak tersedia.");
+      print(
+        "Tidak ada pekerja yang terdefinisi untuk layanan ini, semua slot dianggap tidak tersedia.",
+      );
       for (String timeSlot in service.availableTimeSlots) {
         slotStatuses[timeSlot] = "Booked"; // Atau "Unavailable"
       }
@@ -111,14 +114,16 @@ class ServiceRepository {
       try {
         // Query ke koleksi 'bookings'
         print(serviceId);
-        QuerySnapshot bookingSnapshot = await firestore
-            .collection('bookings')
-            .where('serviceId', isEqualTo: serviceId)
-            .where('date', isEqualTo: formattedDate)
-            .where('startTime', isEqualTo: timeSlot)
-            .get();
+        QuerySnapshot bookingSnapshot =
+            await firestore
+                .collection('bookings')
+                .where('serviceId', isEqualTo: serviceId)
+                .where('date', isEqualTo: formattedDate)
+                .where('startTime', isEqualTo: timeSlot)
+                .get();
 
-        int jumlahPekerjaYangSudahDipesanUntukJamIni = bookingSnapshot.docs.length;
+        int jumlahPekerjaYangSudahDipesanUntukJamIni =
+            bookingSnapshot.docs.length;
         print(jumlahPekerjaYangSudahDipesanUntukJamIni);
 
         // Logika Pengecekan "Full" untuk Slot Jam
@@ -129,7 +134,8 @@ class ServiceRepository {
         }
       } catch (e) {
         print("Error saat mengecek status slot $timeSlot: $e");
-        slotStatuses[timeSlot] = "Error"; // Tandai sebagai error jika query gagal
+        slotStatuses[timeSlot] =
+            "Error"; // Tandai sebagai error jika query gagal
       }
     }
 
@@ -143,7 +149,8 @@ class ServiceRepository {
     required ServiceModel service,
   }) async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
-    Map<String, String> workerStatuses = {}; // Format: {"Nama Pekerja": "Status"}
+    Map<String, String> workerStatuses =
+        {}; // Format: {"Nama Pekerja": "Status"}
 
     String formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
     List<String> allWorkerNames = service.workerNames;
@@ -162,13 +169,17 @@ class ServiceRepository {
       print("status: 'confirmed'");
       print("-----------------------------------------------");
 
-      QuerySnapshot bookingSnapshot = await firestore
-          .collection('bookings')
-          .where('serviceId', isEqualTo: serviceId)
-          .where('date', isEqualTo: formattedDate)
-          .where('startTime', isEqualTo: selectedTimeSlot) // Filter berdasarkan slot waktu yang dipilih
-          .where('status', isEqualTo: 'confirmed')
-          .get();
+      QuerySnapshot bookingSnapshot =
+          await firestore
+              .collection('bookings')
+              .where('serviceId', isEqualTo: serviceId)
+              .where('date', isEqualTo: formattedDate)
+              .where(
+                'startTime',
+                isEqualTo: selectedTimeSlot,
+              ) // Filter berdasarkan slot waktu yang dipilih
+              .where('status', isEqualTo: 'confirmed')
+              .get();
 
       List<String> bookedWorkerNames = [];
       for (var doc in bookingSnapshot.docs) {
@@ -178,8 +189,9 @@ class ServiceRepository {
           bookedWorkerNames.add(data['workerId'] as String);
         }
       }
-      print("Pekerja yang sudah di-booking untuk slot $selectedTimeSlot di tanggal $formattedDate: $bookedWorkerNames");
-
+      print(
+        "Pekerja yang sudah di-booking untuk slot $selectedTimeSlot di tanggal $formattedDate: $bookedWorkerNames",
+      );
 
       // Tentukan status untuk setiap pekerja
       for (String workerName in allWorkerNames) {
@@ -190,7 +202,9 @@ class ServiceRepository {
         }
       }
     } catch (e) {
-      print("Error saat mengecek status pekerja untuk slot $selectedTimeSlot: $e");
+      print(
+        "Error saat mengecek status pekerja untuk slot $selectedTimeSlot: $e",
+      );
       // Jika terjadi error, tandai semua pekerja sebagai Error atau sesuai kebijakanmu
       for (String workerName in allWorkerNames) {
         workerStatuses[workerName] = "Error";
@@ -204,10 +218,13 @@ class ServiceRepository {
     final cloudName = 'dxk0ttpjw'; // Ganti dengan cloudname kamu
     final uploadPreset = 'services'; // Ganti dengan upload preset kamu
 
-    final uri = Uri.parse('https://api.cloudinary.com/v1_1/$cloudName/image/upload');
-    final request = http.MultipartRequest('POST', uri)
-      ..fields['upload_preset'] = uploadPreset
-      ..files.add(await http.MultipartFile.fromPath('file', file.path));
+    final uri = Uri.parse(
+      'https://api.cloudinary.com/v1_1/$cloudName/image/upload',
+    );
+    final request =
+        http.MultipartRequest('POST', uri)
+          ..fields['upload_preset'] = uploadPreset
+          ..files.add(await http.MultipartFile.fromPath('file', file.path));
 
     final response = await request.send();
     if (response.statusCode == 200) {
@@ -260,10 +277,24 @@ class ServiceRepository {
         reviews: [],
         seller_id: sellerId,
         serviceDurationMinutes: duration,
-        operatingDays: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+        operatingDays: [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday",
+        ],
         availableTimeSlots: [
-          "08:00", "09:00", "10:00", "11:00",
-          "13:00", "14:00", "15:00", "16:00"
+          "08:00",
+          "09:00",
+          "10:00",
+          "11:00",
+          "13:00",
+          "14:00",
+          "15:00",
+          "16:00",
         ],
         workerNames: workerNames,
       );
@@ -273,5 +304,12 @@ class ServiceRepository {
     } catch (e) {
       throw Exception('Gagal membuat layanan: $e');
     }
+  }
+
+  Future<void> deleteServiceById(String serviceId) async {
+    await FirebaseFirestore.instance
+        .collection('services')
+        .doc(serviceId)
+        .delete();
   }
 }

@@ -15,7 +15,7 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
     on<LoadWorkerSlotStatuses>(_onLoadWorkerSlotStatuses);
     on<LoadSellerServices>(_onLoadSellerServices);
     on<CreateSellerServices>(_onCreateSellerServices);
-
+    on<DeleteService>(_onDeleteService);
   }
 
   Future<void> _onLoadAllServices(
@@ -78,29 +78,33 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
         selectedTimeSlot: event.selectedTime,
         serviceId: event.serviceId,
       );
-      emit(WorkerSlotStatusesLoaded(workerStatuses:statuses));
+      emit(WorkerSlotStatusesLoaded(workerStatuses: statuses));
     } catch (e) {
       emit(ServiceLoadFailure(e.toString()));
     }
   }
 
   Future<void> _onLoadSellerServices(
-      LoadSellerServices event,
-      Emitter<ServiceState> emit,
-      ) async {
+    LoadSellerServices event,
+    Emitter<ServiceState> emit,
+  ) async {
     emit(ServiceLoading());
     try {
-      final services = await _serviceRepository.getServicesBySeller(event.sellerId);
-      emit(ServiceSuccess(services: services, promoServices: [])); // atau pakai SellerServiceLoaded
+      final services = await _serviceRepository.getServicesBySeller(
+        event.sellerId,
+      );
+      emit(
+        ServiceSuccess(services: services, promoServices: []),
+      ); // atau pakai SellerServiceLoaded
     } catch (e) {
       emit(ServiceLoadFailure(e.toString()));
     }
   }
 
   Future<void> _onCreateSellerServices(
-      CreateSellerServices event,
-      Emitter<ServiceState> emit,
-      ) async {
+    CreateSellerServices event,
+    Emitter<ServiceState> emit,
+  ) async {
     emit(CreateSellerServicesInProgress());
     try {
       await _serviceRepository.createServiceWithImages(
@@ -115,7 +119,6 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
         sellerId: event.sellerId,
         duration: event.serviceModel.serviceDurationMinutes,
         workerNames: event.serviceModel.workerNames,
-
       );
 
       emit(CreateSellerServicesSuccess());
@@ -124,6 +127,20 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
     }
   }
 
-
-
+  Future<void> _onDeleteService(
+    DeleteService event,
+    Emitter<ServiceState> emit,
+  ) async {
+    emit(ServiceLoading());
+    try {
+      await _serviceRepository.deleteServiceById(event.serviceId);
+      // Setelah dihapus, reload layanan seller
+      final services = await _serviceRepository.getServicesBySeller(
+        event.sellerId,
+      );
+      emit(ServiceSuccess(services: services, promoServices: []));
+    } catch (e) {
+      emit(ServiceLoadFailure(e.toString()));
+    }
+  }
 }
