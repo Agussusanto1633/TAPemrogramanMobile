@@ -317,16 +317,18 @@ class _AdminCreateServicePageState extends State<AdminCreateServicePage> {
 
     final discountValue = int.tryParse(discountController.text.trim()) ?? 0;
     if (discountValue > 100) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Diskon tidak boleh lebih dari 100%')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Diskon tidak boleh lebih dari 100%')),
+      );
       return;
     }
 
     if (priceController.text.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Harga tidak boleh kosong!')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Harga tidak boleh kosong!')),
+      );
       return;
     }
-
-
 
     if (mainImageFile == null) {
       ScaffoldMessenger.of(
@@ -421,7 +423,7 @@ class _AdminCreateServicePageState extends State<AdminCreateServicePage> {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: BlocListener<ServiceBloc, ServiceState>(
-          listener: (context, state) {
+          listener: (context, state) async {
             if (state is CreateSellerServicesInProgress) {
               showDialog(
                 context: context,
@@ -429,21 +431,26 @@ class _AdminCreateServicePageState extends State<AdminCreateServicePage> {
                 builder:
                     (_) => const Center(child: CircularProgressIndicator()),
               );
-            } else {
-              Navigator.pop(context);
             }
 
             if (state is CreateSellerServicesSuccess) {
+              Navigator.of(context).pop(); // ini nutup dialog loading
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Berhasil menambahkan layanan!')),
               );
-              Navigator.pop(context);
-            } else if (state is CreateSellerServicesFailure) {
+              Navigator.of(
+                context,
+              ).pop(true); // ini nutup halaman & kirim signal
+            }
+
+            if (state is CreateSellerServicesFailure) {
+              Navigator.of(context).pop(); // ini nutup dialog loading
               ScaffoldMessenger.of(
                 context,
               ).showSnackBar(SnackBar(content: Text('Gagal: ${state.error}')));
             }
           },
+
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

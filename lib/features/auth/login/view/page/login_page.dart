@@ -9,6 +9,7 @@ import 'package:servista/core/custom_widgets/custom_button_widget.dart';
 import 'package:servista/core/nav/nav.dart';
 import 'package:servista/core/theme/app_font_weight.dart';
 import 'package:servista/core/theme/color_value.dart';
+import 'package:servista/core/transparent_appbar/transparent_appbar.dart';
 import 'package:servista/features/auth/login/bloc/auth_bloc.dart';
 import 'package:servista/features/auth/login/bloc/auth_service.dart';
 import 'package:servista/features/auth/login/bloc/auth_state.dart';
@@ -30,6 +31,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: transparentAppBarWidget(isDarkStyle: true),
       body: BlocProvider(
         create: (context) => AuthBloc(AuthService()),
         child: SafeArea(
