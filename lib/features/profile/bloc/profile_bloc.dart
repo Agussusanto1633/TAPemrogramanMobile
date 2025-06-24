@@ -21,7 +21,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       }
     });
 
-    // ✅ Handle jadi seller
     on<BecomeSeller>((event, emit) async {
       emit(ProfileLoading());
       try {
@@ -38,6 +37,25 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         }
       } catch (e) {
         emit(ProfileError("Gagal mendaftar sebagai seller: ${e.toString()}"));
+      }
+    });
+
+    on<BecomeBuyer>((event, emit) async {
+      emit(ProfileLoading());
+      try {
+        final user = FirebaseAuth.instance.currentUser;
+        if (user != null) {
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(user.uid)
+              .update({'isSeller': false});
+
+          emit(ProfileUpdated());
+        } else {
+          emit(ProfileError("User not logged in"));
+        }
+      } catch (e) {
+        emit(ProfileError("Gagal kembali sebagai pembeli: ${e.toString()}"));
       }
     });
   }
