@@ -221,7 +221,7 @@ class _PaymentEticketPageState extends State<PaymentEticketPage> {
                             ),
                           ),
                         ),
-                        Gap(10.h),
+                        Gap(10.h),  
                         CustomButtonWidget(label: "Unduh E-Tiket"),
                         Gap(13.h),
                       ],
