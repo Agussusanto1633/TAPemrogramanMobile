@@ -36,7 +36,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     context.read<ServiceBloc>().add(LoadAllServices());
-
     loadUserData();
   }
 
@@ -237,13 +236,26 @@ class _HomePageState extends State<HomePage> {
                           style: textTheme.bodyLarge,
                         ),
                         Spacer(),
-                        Text("Lihat Semua", style: textTheme.bodyMedium),
-                        SizedBox(width: 5.w),
-                        SvgPicture.asset("assets/icons/arrow.svg"),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SearchServicePage(),
+                              ),
+                            );
+                          },
+                          child: Row(
+                            children: [
+                              Text("Lihat Semua", style: textTheme.bodyMedium),
+                              SizedBox(width: 5.w),
+                              SvgPicture.asset("assets/icons/arrow.svg"),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ),
-
                   SizedBox(height: 16.h),
                   BlocBuilder<ServiceBloc, ServiceState>(
                     builder: (context, state) {
@@ -253,9 +265,8 @@ class _HomePageState extends State<HomePage> {
                           child: Center(child: CircularProgressIndicator()),
                         );
                       } else if (state is ServiceSuccess) {
-                        print("Loading services... ${state.toString()}");
                         return SizedBox(
-                          height: 285.h,
+                          height: 290.h,
                           width: MediaQuery.of(context).size.width,
                           child: ListView.builder(
                             itemCount: state.services.length,
@@ -283,19 +294,6 @@ class _HomePageState extends State<HomePage> {
                       return Container();
                     },
                   ),
-                  // SizedBox(
-                  //   height: 285.h,
-                  //   width: MediaQuery.of(context).size.width,
-                  //   child: ListView.builder(
-                  //     itemCount: 3,
-                  //     scrollDirection: Axis.horizontal,
-                  //     shrinkWrap: true,
-                  //     padding: EdgeInsets.only(bottom: 60.h, left: 20.w),
-                  //     itemBuilder: (context, index) {
-                  //       return HomeCard();
-                  //     },
-                  //   ),
-                  // ),
                 ],
               ),
             ],

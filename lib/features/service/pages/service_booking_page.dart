@@ -27,8 +27,7 @@ class ServiceBookingPage extends StatefulWidget {
 class _ServiceBookingPageState extends State<ServiceBookingPage> {
   DateTime selectedDate = DateTime.now();
   late String displayName;
-  late String email;
-  late String photoUrl;
+  late String phoneNumber;
 
   @override
   void initState() {
@@ -42,8 +41,7 @@ class _ServiceBookingPageState extends State<ServiceBookingPage> {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       displayName = prefs.getString('user_displayName') ?? 'Guest';
-      email = prefs.getString('user_email') ?? 'Unknown';
-      photoUrl = prefs.getString('user_photoURL') ?? '';
+      phoneNumber = prefs.getString('noHp') ?? 'Tidak Ada No HP';
     });
   }
 
@@ -254,7 +252,7 @@ class _ServiceBookingPageState extends State<ServiceBookingPage> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              "Firman",
+                                              displayName,
                                               style: textTheme.bodyLarge!
                                                   .copyWith(
                                                     color: Color(0xff3F414E),
@@ -264,7 +262,7 @@ class _ServiceBookingPageState extends State<ServiceBookingPage> {
                                                   ),
                                             ),
                                             Text(
-                                              "+628123456789",
+                                              phoneNumber,
                                               style: textTheme.bodyLarge!
                                                   .copyWith(
                                                     color: Color(0xff3F414E),
