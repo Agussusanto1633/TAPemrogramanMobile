@@ -19,9 +19,7 @@ class AdminManagePage extends StatefulWidget {
   State<AdminManagePage> createState() => _AdminManagePageState();
 }
 
-
 class _AdminManagePageState extends State<AdminManagePage> {
-
   String sellerId = '';
   @override
   void initState() {
@@ -38,7 +36,6 @@ class _AdminManagePageState extends State<AdminManagePage> {
     context.read<ServiceBloc>().add(LoadSellerServices(sellerId: sellerId));
   }
 
-
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
@@ -49,9 +46,7 @@ class _AdminManagePageState extends State<AdminManagePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 20.w,
-              ),
+              padding: EdgeInsets.symmetric(horizontal: 20.w),
               child: Row(
                 children: [
                   Text(
@@ -64,7 +59,10 @@ class _AdminManagePageState extends State<AdminManagePage> {
                   const Spacer(),
                   GestureDetector(
                     onTap: () {
-                      Nav.to(context, AdminCreateServicePage(sellerId: sellerId,));
+                      Nav.to(
+                        context,
+                        AdminCreateServicePage(sellerId: sellerId),
+                      );
                     },
                     child: Container(
                       padding: EdgeInsets.symmetric(
@@ -90,12 +88,15 @@ class _AdminManagePageState extends State<AdminManagePage> {
             BlocBuilder<ServiceBloc, ServiceState>(
               builder: (context, state) {
                 if (state is ServiceLoading) {
-                  return Container(
-                    height: MediaQuery.of(context).size.height/2,
-                      child: const Center(child: CircularProgressIndicator()));
+                  return SizedBox(
+                    height: MediaQuery.of(context).size.height / 2,
+                    child: const Center(child: CircularProgressIndicator()),
+                  );
                 } else if (state is ServiceSuccess) {
                   if (state.services.isEmpty) {
-                    return Center(child: Text('Tidak ada service milik Anda. ${sellerId}'));
+                    return Center(
+                      child: Text('Tidak ada service milik Anda. ${sellerId}'),
+                    );
                   }
                   return Expanded(
                     child: ListView.builder(
@@ -108,15 +109,54 @@ class _AdminManagePageState extends State<AdminManagePage> {
                         final service = state.services[index];
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 12),
-                          child: YourVerticalServiceCard(service: service),
+                          child: YourVerticalServiceCard(
+                            service: service,
+                            onTapDelete: () async {
+                              final confirm = await showDialog<bool>(
+                                context: context,
+                                builder:
+                                    (_) => AlertDialog(
+                                      title: Text('Hapus Layanan'),
+                                      content: Text(
+                                        'Apakah kamu yakin ingin menghapus layanan ini?',
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed:
+                                              () =>
+                                                  Navigator.pop(context, false),
+                                          child: Text('Batal'),
+                                        ),
+                                        TextButton(
+                                          onPressed:
+                                              () =>
+                                                  Navigator.pop(context, true),
+                                          child: Text('Hapus'),
+                                        ),
+                                      ],
+                                    ),
+                              );
+
+                              if (confirm == true) {
+                                context.read<ServiceBloc>().add(
+                                  DeleteService(
+                                    serviceId: service.id,
+                                    sellerId: service.seller_id,
+                                  ),
+                                );
+                              }
+                            },
+                          ),
                         );
                       },
                     ),
                   );
                 } else if (state is ServiceLoadFailure) {
-                  return Center(child: Text('Gagal load service: ${state.message}'));
+                  return Center(
+                    child: Text('Gagal load service: ${state.message}'),
+                  );
                 }
-        
+
                 return const SizedBox(); // initial state
               },
             ),
@@ -125,5 +165,4 @@ class _AdminManagePageState extends State<AdminManagePage> {
       ),
     );
   }
-
 }

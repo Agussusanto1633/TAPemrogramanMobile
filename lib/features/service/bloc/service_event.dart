@@ -80,3 +80,10 @@ class CreateSellerServices extends ServiceEvent {
     additionalPhotos,
   ];
 }
+
+class DeleteService extends ServiceEvent {
+  final String serviceId;
+  final String sellerId;
+
+  const DeleteService({required this.serviceId, required this.sellerId});
+}

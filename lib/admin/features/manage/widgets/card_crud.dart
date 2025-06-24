@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
-
+import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../core/theme/color_value.dart';
 import '../../../../features/service/model/service_model.dart';
-
 
 class YourVerticalServiceCard extends StatelessWidget {
   final ServiceModel service;
   final VoidCallback? onTap;
+  final VoidCallback? onTapDelete;
 
   const YourVerticalServiceCard({
     Key? key,
     required this.service,
     this.onTap,
+    this.onTapDelete,
   }) : super(key: key);
 
   @override
@@ -38,7 +38,6 @@ class YourVerticalServiceCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Gambar
             ClipRRect(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(16.r),
@@ -53,19 +52,29 @@ class YourVerticalServiceCard extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-
-            // Konten
             Expanded(
               child: Padding(
                 padding: EdgeInsets.all(12.w),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      service.name,
-                      style: textTheme.titleMedium,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            service.name,
+                            style: textTheme.titleMedium,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: onTapDelete,
+                          child: Icon(Icons.delete, color: Colors.red, size: 18.w),
+                        ),
+                      ],
                     ),
                     SizedBox(height: 4.h),
                     Text(
@@ -86,10 +95,7 @@ class YourVerticalServiceCard extends StatelessWidget {
                           color: ColorValue.primaryColor,
                         ),
                         SizedBox(width: 4.w),
-                        Text(
-                          "${service.rating}",
-                          style: textTheme.bodyLarge,
-                        ),
+                        Text("${service.rating}", style: textTheme.bodyLarge),
                       ],
                     ),
                   ],
