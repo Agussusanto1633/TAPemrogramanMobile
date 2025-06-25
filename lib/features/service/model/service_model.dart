@@ -97,7 +97,7 @@ class ServiceModel {
 
 class Facility {
   final String name;
-  final dynamic detail; // Bisa String, int, bool dll tergantung value di JSON
+  final String detail;
 
   Facility({
     required this.name,

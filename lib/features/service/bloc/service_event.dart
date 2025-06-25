@@ -9,6 +9,7 @@ abstract class ServiceEvent extends Equatable {
 
   @override
   List<Object> get props => [];
+
 }
 
 class LoadAllServices extends ServiceEvent {}
@@ -87,3 +88,26 @@ class DeleteService extends ServiceEvent {
 
   const DeleteService({required this.serviceId, required this.sellerId});
 }
+
+class UpdateSellerService extends ServiceEvent {
+  final ServiceModel serviceModel;
+  final File? mainImage;
+  final List<File> additionalPhotos;
+  final List<String> deletedPhotoUrls;
+
+  const UpdateSellerService({
+    required this.serviceModel,
+    this.mainImage,
+    required this.additionalPhotos,
+    required this.deletedPhotoUrls,
+  });
+
+  @override List<Object> get props => [
+    serviceModel,
+    mainImage ?? '',
+    additionalPhotos,
+    deletedPhotoUrls,
+  ];
+}
+
+

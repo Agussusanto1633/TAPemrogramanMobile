@@ -15,6 +15,7 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
     on<LoadWorkerSlotStatuses>(_onLoadWorkerSlotStatuses);
     on<LoadSellerServices>(_onLoadSellerServices);
     on<CreateSellerServices>(_onCreateSellerServices);
+    on<UpdateSellerService>(_onUpdateSellerService); // TAMBAHAN INI
     on<DeleteService>(_onDeleteService);
   }
 
@@ -126,6 +127,38 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
       emit(CreateSellerServicesFailure(e.toString()));
     }
   }
+
+  Future<void> _onUpdateSellerService(
+      UpdateSellerService event,
+      Emitter<ServiceState> emit,
+      ) async {
+    emit(UpdateSellerServiceInProgress());
+    try {
+      await _serviceRepository.updateServiceWithImages(
+        serviceId: event.serviceModel.id,
+        name: event.serviceModel.name,
+        address: event.serviceModel.address,
+        price: event.serviceModel.price,
+        discount: event.serviceModel.discount,
+        linkMaps: event.serviceModel.linkMaps,
+        facilities: event.serviceModel.facilities,
+        mainImage: event.mainImage, // bisa null
+        additionalPhotos: event.additionalPhotos,
+        deletedPhotoUrls: event.deletedPhotoUrls,
+        sellerId: event.serviceModel.seller_id,
+        duration: event.serviceModel.serviceDurationMinutes,
+        workerNames: event.serviceModel.workerNames,
+        // Tambahan data yang perlu dipertahankan
+        existingMainImageUrl: event.serviceModel.image,
+        existingPhotoUrls: event.serviceModel.photos,
+      );
+
+      emit(UpdateSellerServiceSuccess());
+    } catch (e) {
+      emit(UpdateSellerServiceFailure(e.toString()));
+    }
+  }
+
 
   Future<void> _onDeleteService(
     DeleteService event,

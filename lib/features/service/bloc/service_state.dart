@@ -126,3 +126,17 @@ class CreateSellerServicesFailure extends ServiceState {
   @override
   List<Object> get props => [error];
 }
+
+class UpdateSellerServiceInProgress extends ServiceState {}
+
+class UpdateSellerServiceSuccess extends ServiceState {}
+
+class UpdateSellerServiceFailure extends ServiceState {
+  final String error;
+
+  const UpdateSellerServiceFailure(this.error);
+
+  @override
+  List<Object> get props => [error];
+}
+

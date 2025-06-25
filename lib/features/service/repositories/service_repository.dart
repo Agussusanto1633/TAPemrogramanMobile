@@ -9,6 +9,8 @@ import '../model/service_model.dart';
 
 class ServiceRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  Map<String, String> _facilitiesToMap(List<Facility> list) =>
+      { for (final f in list) f.name : f.detail };
 
   Future<List<ServiceModel>> getServices() async {
     try {
@@ -305,6 +307,76 @@ class ServiceRepository {
       throw Exception('Gagal membuat layanan: $e');
     }
   }
+
+// ────────────────────────────────────────────────────────────────
+// 🔹 Fungsi: updateServiceWithImages (tanpa delete Cloudinary)
+// ────────────────────────────────────────────────────────────────
+  Future<void> updateServiceWithImages({
+
+    required String serviceId,
+
+    // field teks / angka
+    required String name,
+    required String address,
+    required int price,
+    required int discount,
+    required String linkMaps,
+    required List<Facility> facilities,
+    required String sellerId,
+    required int duration,
+    required List<String> workerNames,
+
+    // gambar
+    File? mainImage,                       // null = tidak diganti
+    required List<File> additionalPhotos,  // kosong = tidak menambah
+    required List<String> deletedPhotoUrls,
+
+    // state lama
+    required String existingMainImageUrl,
+    required List<String> existingPhotoUrls,
+  }) async {
+
+    try {
+      // 1) Upload main image baru (jika diganti)
+      String finalMainImageUrl = existingMainImageUrl;
+      if (mainImage != null) {
+        finalMainImageUrl = await uploadImageToCloudinary(mainImage);
+        // 👉 tidak menghapus main image lama di Cloudinary
+      }
+
+      // 2) Upload foto tambahan baru
+      final List<String> newAdditionalUrls = [];
+      for (final photo in additionalPhotos) {
+        final url = await uploadImageToCloudinary(photo);
+        newAdditionalUrls.add(url);
+      }
+
+      // 3) Susun daftar foto akhir (tanpa delete di Cloudinary)
+      final remainingOldUrls = existingPhotoUrls
+          .where((url) => !deletedPhotoUrls.contains(url))
+          .toList();
+      final finalPhotoUrls = [...remainingOldUrls, ...newAdditionalUrls];
+
+      // 4) Update dokumen Firestore
+      await _firestore.collection('services').doc(serviceId).update({
+        'name': name,
+        'address': address,
+        'price': price,
+        'discount': discount,
+        'linkMaps': linkMaps,
+        'facilities': _facilitiesToMap(facilities),                    // ✅ map
+        'image': finalMainImageUrl,
+        'photos': finalPhotoUrls,
+        'seller_id': sellerId,
+        'serviceDurationMinutes': duration,
+        'workerNames': workerNames,
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
+    } catch (e) {
+      throw Exception('Gagal memperbarui layanan: $e');
+    }
+  }
+
 
   Future<void> deleteServiceById(String serviceId) async {
     await FirebaseFirestore.instance

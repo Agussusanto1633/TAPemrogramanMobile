@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:servista/admin/features/manage/page/admin_edit_servivce_page.dart';
+import 'package:servista/core/nav/nav.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:servista/core/theme/color_value.dart';
 import 'package:servista/features/service/bloc/service_bloc.dart';
@@ -30,10 +32,15 @@ class _AdminManagePageState extends State<AdminManagePage> {
 
   Future<void> loadUserData() async {
     final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      sellerId = prefs.getString('user_uid') ?? '';
-    });
-    context.read<ServiceBloc>().add(LoadSellerServices(sellerId: sellerId));
+    final uid = prefs.getString('user_uid') ?? '';
+    debugPrint('[AdminManage] sellerId dari shared pref = "$uid"');
+
+    setState(() => sellerId = uid);
+
+    if (uid.isNotEmpty) {
+      context.read<ServiceBloc>().add(LoadSellerServices(sellerId: uid));
+      debugPrint('[AdminManage] Dispatch LoadSellerServices uid="$uid"');
+    }
   }
 
   @override
@@ -119,38 +126,53 @@ class _AdminManagePageState extends State<AdminManagePage> {
                         final service = state.services[index];
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 12),
-                          child: YourVerticalServiceCard(
-                            service: service,
-                            onTapDelete: () async {
-                              final confirm = await showDialog<bool>(
-                                context: context,
-                                builder: (_) => AlertDialog(
-                                  title: const Text('Hapus Layanan'),
-                                  content: const Text(
-                                      'Apakah kamu yakin ingin menghapus layanan ini?'),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () =>
-                                          Navigator.pop(context, false),
-                                      child: const Text('Batal'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () =>
-                                          Navigator.pop(context, true),
-                                      child: const Text('Hapus'),
-                                    ),
-                                  ],
+                          child: GestureDetector(
+                            onTap: () async {
+                              final bloc = context.read<ServiceBloc>();   // ← simpan dulu
+                              final updated = await Navigator.push<bool>(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => AdminEditServicePage(service: service),
                                 ),
                               );
-                              if (confirm == true) {
-                                context.read<ServiceBloc>().add(
-                                  DeleteService(
-                                    serviceId: service.id,
-                                    sellerId: sellerId,
-                                  ),
-                                );
+
+                              if (updated == true) {
+                                bloc.add(LoadSellerServices(sellerId: sellerId));
                               }
                             },
+                            child: YourVerticalServiceCard(
+                              service: service,
+                              onTapDelete: () async {
+                                final confirm = await showDialog<bool>(
+                                  context: context,
+                                  builder: (_) => AlertDialog(
+                                    title: const Text('Hapus Layanan'),
+                                    content: const Text(
+                                        'Apakah kamu yakin ingin menghapus layanan ini?'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.pop(context, false),
+                                        child: const Text('Batal'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.pop(context, true),
+                                        child: const Text('Hapus'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                                if (confirm == true) {
+                                  context.read<ServiceBloc>().add(
+                                    DeleteService(
+                                      serviceId: service.id,
+                                      sellerId: sellerId,
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
                           ),
                         );
                       },

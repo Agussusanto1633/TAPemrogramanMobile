@@ -63,7 +63,7 @@ class AppThemeData {
       ),
 
 
-      tabBarTheme: TabBarTheme(
+      tabBarTheme: TabBarThemeData(
         overlayColor: WidgetStateProperty.resolveWith<Color?>(
               (Set<WidgetState> states) {
             if (states.contains(WidgetState.pressed)) {
