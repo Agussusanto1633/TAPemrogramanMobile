@@ -65,7 +65,7 @@ class _LoginEmailPageState extends State<LoginEmailPage> {
                   children: [
                     Gap(150.h),
                     Text(
-                      "Servista",
+                      "KoneksiJasa",
                       style: GoogleFonts.onest(
                         fontSize: 40.sp,
                         fontWeight: FontWeight.w700,
