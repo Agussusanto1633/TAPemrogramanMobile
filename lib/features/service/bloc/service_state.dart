@@ -111,7 +111,7 @@ class ServiceLoadFailure extends ServiceState {
 class SellerServiceLoaded extends ServiceState {
   final List<ServiceModel> services;
 
-  SellerServiceLoaded(this.services);
+  const SellerServiceLoaded(this.services);
 }
 
 

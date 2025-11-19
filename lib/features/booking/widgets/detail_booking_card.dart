@@ -3,8 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:servista/features/booking/model/booking_model.dart';
-import 'package:servista/features/booking/page/booking_page.dart';
 import 'package:servista/features/service/model/service_model.dart';
 
 class DetailBookingCard extends StatelessWidget {

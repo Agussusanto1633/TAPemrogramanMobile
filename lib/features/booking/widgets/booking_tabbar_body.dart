@@ -6,7 +6,6 @@ import 'package:servista/core/theme/color_value.dart';
 import 'package:servista/features/booking/bloc/booking_bloc.dart';
 import 'package:servista/features/service/bloc/service_bloc.dart';
 import 'package:servista/features/booking/widgets/booking_list.dart';
-import 'package:intl/intl.dart';
 
 import '../../service/bloc/service_state.dart';
 import '../../service/model/service_model.dart';

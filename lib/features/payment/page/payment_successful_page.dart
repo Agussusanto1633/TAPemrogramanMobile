@@ -16,7 +16,7 @@ import '../../../core/theme/color_value.dart';
 import '../../../core/utils/utils.dart';
 
 class PaymentSuccessfulPage extends StatefulWidget {
-  const PaymentSuccessfulPage({Key? key}) : super(key: key);
+  const PaymentSuccessfulPage({super.key});
 
   @override
   State<PaymentSuccessfulPage> createState() => _PaymentSuccessfulPageState();

@@ -142,7 +142,6 @@ class _TimeSelectionInteractiveArea extends StatefulWidget {
   final Function(String?) onTimeConfirmed;
 
   const _TimeSelectionInteractiveArea({
-    super.key,
     required this.times,
     required this.slotStatusesData,
     required this.dateFormatted,

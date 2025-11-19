@@ -9,7 +9,7 @@ import '../../../core/theme/color_value.dart';
 
 class ServiceCard extends StatelessWidget {
   final ServiceModel? service;
-  ServiceCard({super.key, this.service});
+  const ServiceCard({super.key, this.service});
 
   @override
   Widget build(BuildContext context) {

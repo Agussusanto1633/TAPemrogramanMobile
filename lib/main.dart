@@ -9,23 +9,16 @@ import 'package:servista/features/auth/login/bloc/auth_bloc.dart';
 import 'package:servista/features/auth/login/bloc/auth_service.dart';
 import 'package:servista/features/payment/bloc/payment_bloc.dart';
 import 'package:servista/features/splash/view/page/splash_page.dart';
-import 'package:servista/features/home/page/home_page.dart';
-import 'package:servista/firestore/firestore_page.dart';
-import 'package:servista/home_dummy.dart';
 
-import 'core/nav_bar/nav_bar.dart';
 import 'core/theme/app_style.dart';
 import 'core/theme/app_theme.dart';
 import 'features/booking/bloc/booking_bloc.dart';
-import 'features/chat/page/chat_page.dart';
 import 'features/payment/cubit/payment_cubit.dart';
 import 'features/profile/bloc/profile_bloc.dart';
-import 'features/profile/page/profile_page.dart';
 import 'features/service/bloc/service_bloc.dart';
 import 'features/service/cubit/service_cubit.dart';
 import 'features/service/repositories/service_repository.dart';
 import 'firebase_options.dart';
-import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 Future<void> main() async {

@@ -59,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
               BlocConsumer<AuthBloc, AuthState>(
                 listener: (context, state) async {
                   if (state is AuthSignedIn) {
-                    final uid = state.user?.uid;
+                    final uid = state.user.uid;
                     if (uid != null) {
                       final doc =
                           await FirebaseFirestore.instance

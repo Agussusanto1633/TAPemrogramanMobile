@@ -8,7 +8,6 @@ import '../../../../core/theme/color_value.dart';
 import '../../../../features/payment/bloc/payment_bloc.dart';
 import '../../../../features/payment/bloc/payment_event.dart';
 import '../../../../features/payment/cubit/payment_cubit.dart';
-import '../repository/admin_payment_repository.dart';
 
 class AdminTransactionPage extends StatefulWidget {
   const AdminTransactionPage({super.key});

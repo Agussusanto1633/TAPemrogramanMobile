@@ -10,11 +10,11 @@ class YourVerticalServiceCard extends StatelessWidget {
   final VoidCallback? onTapDelete;
 
   const YourVerticalServiceCard({
-    Key? key,
+    super.key,
     required this.service,
     this.onTap,
     this.onTapDelete,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

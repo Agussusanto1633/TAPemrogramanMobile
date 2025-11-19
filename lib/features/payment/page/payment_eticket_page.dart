@@ -13,7 +13,7 @@ import 'package:servista/features/service/cubit/service_cubit.dart';
 import '../../../core/theme/app_font_weight.dart';
 
 class PaymentEticketPage extends StatefulWidget {
-  const PaymentEticketPage({Key? key}) : super(key: key);
+  const PaymentEticketPage({super.key});
 
   @override
   State<PaymentEticketPage> createState() => _PaymentEticketPageState();

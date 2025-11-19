@@ -6,7 +6,6 @@ import 'package:servista/core/nav/nav.dart';
 import 'package:servista/features/home/page/search_service_page.dart';
 import 'package:servista/features/service/bloc/service_state.dart';
 import 'package:servista/features/service/pages/detail_service_page.dart';
-import 'package:servista/features/service/repositories/service_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/scroll/scroll_behavior.dart';

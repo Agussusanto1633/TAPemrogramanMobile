@@ -34,12 +34,12 @@ class _TimeSelectionInteractiveArea extends StatefulWidget {
   onWorkerConfirmed; // Callback saat tombol "Pilih Pekerja" ditekan
 
   const _TimeSelectionInteractiveArea({
-    Key? key,
+    super.key,
     required this.workerNames,
     required this.workerStatusesData,
     required this.headerText,
     required this.onWorkerConfirmed,
-  }) : super(key: key);
+  });
 
   @override
   __TimeSelectionInteractiveAreaState createState() =>

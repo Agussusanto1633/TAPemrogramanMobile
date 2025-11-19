@@ -10,10 +10,10 @@ class HomeCard extends StatelessWidget {
   final VoidCallback onTap;
 
   const HomeCard({
-    Key? key,
+    super.key,
     required this.service,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

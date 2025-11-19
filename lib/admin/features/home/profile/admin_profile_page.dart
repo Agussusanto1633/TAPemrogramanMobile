@@ -18,7 +18,7 @@ import '../../../../features/auth/login/view/page/login_page.dart';
 import '../../../../features/profile/bloc/profile_state.dart';
 
 class AdminProfilePage extends StatefulWidget {
-  const AdminProfilePage({Key? key}) : super(key: key);
+  const AdminProfilePage({super.key});
 
   @override
   State<AdminProfilePage> createState() => _AdminProfilePageState();

@@ -22,7 +22,7 @@ import '../../../core/utils/utils.dart';
 import '../cubit/payment_cubit.dart';
 
 class PaymentPage extends StatefulWidget {
-  const PaymentPage({Key? key}) : super(key: key);
+  const PaymentPage({super.key});
 
   @override
   State<PaymentPage> createState() => _PaymentPageState();
@@ -53,6 +53,7 @@ class _PaymentPageState extends State<PaymentPage> {
     });
   }
 
+  @override
   dispose() {
     timer?.cancel();
     super.dispose();

@@ -15,7 +15,7 @@ import 'admin_create_service_page.dart';
 import '../../../../core/theme/app_font_weight.dart';
 
 class AdminManagePage extends StatefulWidget {
-  const AdminManagePage({Key? key}) : super(key: key);
+  const AdminManagePage({super.key});
 
   @override
   State<AdminManagePage> createState() => _AdminManagePageState();

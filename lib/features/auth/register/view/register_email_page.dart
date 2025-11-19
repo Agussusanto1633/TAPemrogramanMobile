@@ -14,7 +14,7 @@ import '../../login/bloc/auth_bloc.dart';
 import '../../login/bloc/auth_state.dart';
 
 class RegisterEmailPage extends StatefulWidget {
-  const RegisterEmailPage({Key? key}) : super(key: key);
+  const RegisterEmailPage({super.key});
 
   @override
   State<RegisterEmailPage> createState() => _RegisterEmailPageState();

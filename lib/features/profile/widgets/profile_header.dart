@@ -17,12 +17,12 @@ class ProfileHeader extends StatelessWidget {
   final String userPhoneNumber;
 
   const ProfileHeader({
-    Key? key,
+    super.key,
     required this.userName,
     required this.userPhotoURL,
     required this.userEmail,
     required this.userPhoneNumber,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

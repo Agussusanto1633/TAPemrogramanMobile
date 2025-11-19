@@ -46,7 +46,7 @@ class _ServicePageState extends State<ServicePage> {
                   BlocBuilder<ServiceBloc, ServiceState>(
                     builder: (context, state) {
                       if (state is ServiceLoading) {
-                       return Container(
+                       return SizedBox(
                             height: 134.h,
                               child: Center(child: CircularProgressIndicator()));
                       } else if (state is ServiceSuccess) {
